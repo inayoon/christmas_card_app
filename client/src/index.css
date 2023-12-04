@@ -1,3 +1,16 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+#home {
+  font-family: 'Rubik Bubbles', sans-serif;
+}
+/* tailwind.css 또는 프로젝트의 CSS 파일에 추가 */
+@layer utilities {
+  .text-outline-white {
+    -webkit-text-stroke: 0.3px white; /* 웹킷 브라우저 지원 */
+    text-stroke: 1px white; /* 일반적인 브라우저 지원 */
+  }
+}
+
+
