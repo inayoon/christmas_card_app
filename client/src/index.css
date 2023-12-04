@@ -2,8 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
-#home {
+#home, h1 {
   font-family: 'Rubik Bubbles', sans-serif;
+}
+input, p, button,span{
+  font-family: 'Nunito', sans-serif;
+}
+.placeholder-white::placeholder {
+  color: white;
 }
 /* tailwind.css 또는 프로젝트의 CSS 파일에 추가 */
 @layer utilities {
