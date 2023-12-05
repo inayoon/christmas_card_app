@@ -5,7 +5,10 @@
 #home, h1 {
   font-family: 'Rubik Bubbles', sans-serif;
 }
-input, p, button,span{
+#home_banner{
+  font-family: 'Belmist', sans-serif;
+}
+ div, input,p,span,button {
   font-family: 'Nunito', sans-serif;
 }
 .placeholder-white::placeholder {

@@ -52,8 +52,11 @@ export default function Signin() {
           id="password"
           onChange={handleChange}
         />
-        <button className="bg-red-700 text-white p-3 rounded-lg hover:text-yellow-300 hover:font-bold disabled:opacity-60">
+        <button className="bg-red-700 text-white p-3 rounded-lg hover:text-yellow-300 hover:font-bold disabled:opacity-60 relative group">
           {loading ? "Loading..." : "Sign In"}
+          <span className="absolute right-60 top-0 transform translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-xl">
+            🎄
+          </span>
         </button>
       </form>
       <div className="flex gap-2 mt-2">
