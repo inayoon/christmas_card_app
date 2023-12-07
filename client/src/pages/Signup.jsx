@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import OAuth from "../components/OAuth";
 import {
   signUpStart,
   signUpSuccess,
@@ -66,6 +67,7 @@ export default function Signup() {
             🎄
           </span>
         </button>
+        <OAuth />
       </form>
       <div className="flex gap-2 mt-2">
         <p>Have an account?</p>
