@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Cards from "../components/Cards";
+import Card from "../components/Card";
 
 export default function Home() {
   const [sentCard, setSentCard] = useState(0);
@@ -26,7 +26,10 @@ export default function Home() {
         className="max-w-md mx-auto rounded-xl shadow-md"
         src="https://img.freepik.com/free-vector/gradient-christmas-tinsel-background_52683-76117.jpg?w=900&t=st=1701820769~exp=1701821369~hmac=c2ff811c7178881cfd46906aff692bc522c46c69fae6be2762145fe033c79941"
       />
-      <div className="text-center pt-1 text-sm" id="home_banner">
+      <div
+        className="text-center pt-1 text-sm text-lime-700 font-bold"
+        id="home_banner"
+      >
         Sent{" "}
         <span className="text-red-700 underline decoration-dashed decoration-red-700 font-bold text-lg">
           {sentCard}
@@ -47,7 +50,7 @@ export default function Home() {
         >
           ▶More
         </button>
-        <Cards visibleCard={visibleCard} onCardSelect={handleCardSelect} />
+        <Card visibleCard={visibleCard} onCardSelect={handleCardSelect} />
       </div>
     </div>
   );

@@ -1,13 +1,16 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import cardsData from "../data/card.json";
 
 export default function Cards({ visibleCard, onCardSelect }) {
   const visibleCards = cardsData.slice(0, visibleCard);
   const [selectedCard, setSelectedCard] = useState(null);
+  const navigate = useNavigate();
   const handleCardClick = (index) => {
     setSelectedCard(index);
-    onCardSelect(index);
+    // onCardSelect(index);
   };
+
   return (
     <div>
       <div className="flex flex-col gap-2 ">
@@ -37,7 +40,11 @@ export default function Cards({ visibleCard, onCardSelect }) {
                 </p>
                 <button
                   className="px-6 py-2 text-white font-semibold bg-red-700 rounded-full cursor-pointer"
-                  onClick={() => onCardSelect(index)}
+                  onClick={() =>
+                    navigate(`/card-detail/${index + 1}`, {
+                      state: { myCard: visibleCards[selectedCard] },
+                    })
+                  }
                 >
                   Select
                 </button>
