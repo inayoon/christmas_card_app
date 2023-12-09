@@ -1,11 +1,9 @@
 import React from "react";
-import { useLocation } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
+import { selectCardState } from "../../redux/card/cardSlice.js";
 
 export default function CardPicked() {
-  const location = useLocation();
-  const dispatch = useDispatch();
-  const { title, url } = location.state.myCard;
+  const { title, url } = useSelector(selectCardState).selectedCard;
 
   return (
     <div className="flex items-center justify-center pt-8 ">
@@ -18,7 +16,7 @@ export default function CardPicked() {
           Merry Christmas 💌
         </div>
         <div>
-          <img className="max-w-xs mx-auto" src={url} />
+          <img className="max-w-xs mx-auto" src={url} alt={title} />
         </div>
       </div>
     </div>

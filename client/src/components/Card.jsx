@@ -1,14 +1,21 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { selectCard } from "../../redux/card/cardSlice.js";
 import cardsData from "../data/card.json";
 
-export default function Cards({ visibleCard, onCardSelect }) {
+export default function Cards({ visibleCard }) {
   const visibleCards = cardsData.slice(0, visibleCard);
-  const [selectedCard, setSelectedCard] = useState(null);
+  const [selectedIndex, setSelectedIndex] = useState(null);
   const navigate = useNavigate();
-  const handleCardClick = (index) => {
-    setSelectedCard(index);
-    // onCardSelect(index);
+  const dispatch = useDispatch();
+
+  const handleCardSelect = (selectedCard) => {
+    dispatch(selectCard(selectedCard)); // Dispatch the selectCard action
+    navigate(`/card-detail/${selectedCard.index + 1}`);
+  };
+  const handleCardMouse = (index) => {
+    setSelectedIndex(index);
   };
 
   return (
@@ -17,11 +24,11 @@ export default function Cards({ visibleCard, onCardSelect }) {
         {visibleCards.map((card, index) => (
           <div
             className={`relative mx-auto rounded-lg shadow-lg ${
-              selectedCard === index ? "brightness-75 opacity-100" : ""
+              selectedIndex === index ? "brightness-75 opacity-100" : ""
             }`}
             key={index}
-            onMouseEnter={() => handleCardClick(index)}
-            onMouseLeave={() => handleCardClick(null)}
+            onMouseEnter={() => handleCardMouse(index)}
+            onMouseLeave={() => handleCardMouse(null)}
           >
             <img
               className="mx-auto rounded-lg shadow-lg"
@@ -30,7 +37,7 @@ export default function Cards({ visibleCard, onCardSelect }) {
               src={card.url}
               alt={`Christmas Card ${index + 1}`}
             />
-            {selectedCard === index && (
+            {selectedIndex === index && (
               <div className="card-overlay">
                 <p className="text-white text-lg font-bold mb-2">{`Christmas Card ${
                   index + 1
@@ -40,11 +47,7 @@ export default function Cards({ visibleCard, onCardSelect }) {
                 </p>
                 <button
                   className="px-6 py-2 text-white font-semibold bg-red-700 rounded-full cursor-pointer"
-                  onClick={() =>
-                    navigate(`/card-detail/${index + 1}`, {
-                      state: { myCard: visibleCards[selectedCard] },
-                    })
-                  }
+                  onClick={() => handleCardSelect({ ...card, index })}
                 >
                   Select
                 </button>
