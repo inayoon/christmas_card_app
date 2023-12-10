@@ -37,6 +37,8 @@
 }
 
 
+
+
 /* tailwind.css 또는 프로젝트의 CSS 파일에 추가 */
 @layer utilities {
   .text-outline-white {
@@ -48,7 +50,6 @@
     text-stroke: 1.3px black; /* 일반적인 브라우저 지원 */
   }
  
-  
 }
 
 

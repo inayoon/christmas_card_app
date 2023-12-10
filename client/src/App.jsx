@@ -6,6 +6,7 @@ import Profile from "./pages/Profile";
 import CardPicked from "./pages/CardPicked";
 import Header from "./components/Header";
 import PrivateRoute from "./components/PrivateRoute";
+import Envelope from "./pages/Envelope";
 function App() {
   return (
     <BrowserRouter>
@@ -15,6 +16,7 @@ function App() {
         <Route path="/sign-in" element={<Signin />}></Route>
         <Route path="/sign-up" element={<Signup />}></Route>
         <Route path="/card-detail/:id" element={<CardPicked />}></Route>
+        <Route path="/envelope" element={<Envelope />}></Route>
         <Route element={<PrivateRoute />}>
           <Route path="/profile" element={<Profile />} />
         </Route>

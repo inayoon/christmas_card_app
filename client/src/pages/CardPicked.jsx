@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { selectCardState, selectCard } from "../../redux/card/cardSlice.js";
 import cardData from "../data/card.json";
@@ -8,6 +9,7 @@ export default function CardPicked() {
   const [selectedImageTitle, setSelectedImageTitle] = useState(title);
   const [letter, setLetter] = useState();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleDropdownChange = (e) => {
     const selectedTitle = e.target.value;
@@ -15,14 +17,17 @@ export default function CardPicked() {
     const selectedCard = cardData.find((card) => card.title === selectedTitle);
     dispatch(selectCard(selectedCard));
   };
+  const handleAvatar = () => {
+    navigate("/envelope");
+  };
 
   useEffect(() => {
     setSelectedImageTitle(title);
   }, [title]);
 
   return (
-    <div className="flex items-center justify-center pt-8 ">
-      <div className="bg-red-700  w-1/2 h-screen p-8 rounded-2xl shadow-lg mb-8">
+    <div className="flex h-screen items-center justify-center pt-8">
+      <div className="bg-red-700 w-1/2 h-full p-8 rounded-2xl shadow-lg mb-8 flex flex-col overflow-hidden">
         <div
           className="text-center text-3xl text-green-700 text-outline-white"
           id="home"
@@ -31,7 +36,7 @@ export default function CardPicked() {
           Merry Christmas 💌
         </div>
         <div>
-          <img className="max-w-xs mx-auto" src={url} alt={title} />
+          <img className="max-w-lg  max-h-44 mx-auto " src={url} alt={title} />
         </div>
         <div>
           <select
@@ -46,13 +51,24 @@ export default function CardPicked() {
             ))}
           </select>
         </div>
-        <div className="text-center">
+        <div className="text-center flex-grow">
           <textarea
             placeholder="Write your letter.."
             value={letter}
             // onChange={handleLetterChange}
-            className="w-80 h-28 px-4 mt-4 py-2 rounded-md bg-slate-300 focus:outline-none focus:bg-white"
+            className="w-80 h-32 px-4 mt-4 py-2 rounded-lg shadow-md bg-lime-800 text-outline-white focus:outline-none focus:text-green-400 overflow-y-auto"
           />
+        </div>
+        <div className="flex gap-10 flex-wrap justify-center">
+          <button
+            onClick={handleAvatar}
+            className="bg-lime-700 rounded-lg mt-2 p-2 shadow-md text-white flex-shrink-0"
+          >
+            Add your avatar
+          </button>
+          <button className="bg-lime-700 rounded-lg mt-2 py-2 px-6 shadow-md text-white flex-shrink-0">
+            Send
+          </button>
         </div>
       </div>
     </div>
