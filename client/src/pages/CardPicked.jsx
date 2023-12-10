@@ -27,7 +27,7 @@ export default function CardPicked() {
 
   return (
     <div className="flex h-screen items-center justify-center pt-8">
-      <div className="bg-red-700 w-1/2 h-full p-8 rounded-2xl shadow-lg mb-8 flex flex-col overflow-hidden">
+      <div className="bg-red-700 w-1/2 h-full p-8 rounded-2xl shadow-lg mb-8 flex flex-col overflow-y-auto no-scrollbar">
         <div
           className="text-center text-3xl text-green-700 text-outline-white"
           id="home"
@@ -36,7 +36,7 @@ export default function CardPicked() {
           Merry Christmas 💌
         </div>
         <div>
-          <img className="max-w-lg  max-h-44 mx-auto " src={url} alt={title} />
+          <img className="w-3/5 max-h-44 mx-auto " src={url} alt={title} />
         </div>
         <div>
           <select
