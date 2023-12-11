@@ -14,11 +14,14 @@ export default function OAuth() {
       //firebase앱의 인증 객체를 가져옴
       const auth = getAuth(app);
       const result = await signInWithPopup(auth, provider);
-      const response = await axios.post("/api/auth/google", {
-        name: result.user.displayName,
-        email: result.user.email,
-        photo: result.user.photoURL,
-      });
+      const response = await axios.post(
+        "http://localhost:3000/api/auth/google",
+        {
+          name: result.user.displayName,
+          email: result.user.email,
+          photo: result.user.photoURL,
+        }
+      );
       dispatch(signInSuccess(response.data));
       navigate("/");
     } catch (error) {
@@ -31,7 +34,7 @@ export default function OAuth() {
       onClick={handleGoogleClick}
       className="bg-green-700 rounded-lg p-2 text-white hover:text-yellow-300 hover:font-bold relative group"
     >
-      Continue with Google{" "}
+      Continue with Google
       <span className="absolute right-60 top-0 transform translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-xl">
         🎄
       </span>

@@ -7,6 +7,7 @@ import {
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import OAuth from "../components/OAuth.jsx";
 
 export default function Signin() {
   const [form, setForm] = useState();
@@ -58,6 +59,7 @@ export default function Signin() {
             🎄
           </span>
         </button>
+        <OAuth />
       </form>
       <div className="flex gap-2 mt-2">
         <p>Don&apos;t have an account?</p>
