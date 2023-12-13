@@ -14,7 +14,9 @@ export default function Envelope() {
   const [image, setImage] = useState(undefined);
   const [imagePercent, setImagePercent] = useState(0);
   const [imageError, setImageError] = useState(false);
+  const [envData, setEnvData] = useState({});
   const { currentUser } = useSelector((state) => state.user);
+
   useEffect(() => {
     if (image) {
       handleFileUpload(image);
@@ -34,8 +36,12 @@ export default function Envelope() {
       },
       (error) => {
         setImageError(true);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) =>
+          setEnvData({ ...envData, profilePicture: downloadURL })
+        );
       }
-      // ()=>{getDownloadURL(uploadTask.snapshot.ref).then(downloadURL)}
     );
   };
   return (
@@ -65,7 +71,7 @@ export default function Envelope() {
             />
             <img
               className="h-14 w-14  self-center cursor-pointer rounded-full object-cover"
-              src={currentUser.profilePicture}
+              src={envData.profilePicture || currentUser.profilePicture}
               alt="avatar"
               onClick={() => fileRef.current.click()}
             />
