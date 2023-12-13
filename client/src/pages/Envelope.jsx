@@ -14,6 +14,7 @@ export default function Envelope() {
   const [image, setImage] = useState(undefined);
   const [imagePercent, setImagePercent] = useState(0);
   const [imageError, setImageError] = useState(false);
+  //store recipient name and sender image
   const [envData, setEnvData] = useState({});
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const { currentUser } = useSelector((state) => state.user);
@@ -23,6 +24,10 @@ export default function Envelope() {
       handleFileUpload(image);
     }
   }, [image]);
+  const handleChange = (e) => {
+    setEnvData({ ...envData, [e.target.id]: e.target.value });
+  };
+  console.log(envData);
   const handleFileUpload = async (image) => {
     const storage = getStorage(app);
     const fileName = uuidv4() + image.name;
@@ -59,7 +64,9 @@ export default function Envelope() {
             <input
               className="mt-1 p-2 bg-transparent border-b-2 border-neutral-800 w-32 h-12 text-sm placeholder-white"
               type="text"
+              id="recipient"
               placeholder="Recipient's name"
+              onChange={handleChange}
             />
           </div>
           <div className="flex justify-end mx-8 mt-32 pb-2">
