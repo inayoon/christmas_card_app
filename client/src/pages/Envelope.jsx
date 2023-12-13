@@ -47,10 +47,13 @@ export default function Envelope() {
   return (
     <div className="flex items-center justify-center pt-8 h-full">
       <div className="bg-red-700  w-1/2  p-8 rounded-2xl shadow-lg mb-8 h-full">
-        <div className="mx-auto flex flex-col justify-between max-w-md h-60 bg-amber-400 border-2 border-neutral-800 border-solid shadow-md">
+        <h1 className="text-2xl text-center mb-2 text-lime-900 text-outline-white">
+          Add your picture beside From
+        </h1>
+        <div className="mx-auto flex flex-col justify-between max-w-sm bg-amber-400 border-2 border-neutral-800 border-solid shadow-md">
           <div className="flex">
             <div className="p-4" id="home_banner">
-              To.{" "}
+              🎄To.{" "}
             </div>
             <input
               className="mt-1 p-2 bg-transparent border-b-2 border-neutral-800 w-32 h-12 text-sm placeholder-white"
@@ -58,7 +61,7 @@ export default function Envelope() {
               placeholder="Recipient's name"
             />
           </div>
-          <div className="flex justify-end mb-4 mx-2">
+          <div className="flex justify-end mx-8 mt-32 pb-2">
             <div className="p-4" id="home_banner">
               From.
             </div>
@@ -76,16 +79,30 @@ export default function Envelope() {
               onClick={() => fileRef.current.click()}
             />
           </div>
+          <p className="text-right mb-2">
+            {imageError ? (
+              <span className="text-green-700">
+                Error uploading image(file size)
+              </span>
+            ) : imagePercent === 100 ? (
+              <span className="text-green-700 font-semibold">
+                Image Upload Successfully✨
+              </span>
+            ) : (
+              ""
+            )}
+          </p>
         </div>
-        <p className="text-right">
-          {imageError ? (
-            <span>Error uploading image(file size)</span>
-          ) : imagePercent === 100 ? (
-            <span className="text-green-700">Image Upload Successfully</span>
-          ) : (
-            ""
-          )}
-        </p>
+
+        <button
+          id="home"
+          className="text-lg text-outline-white mx-auto block max-w-xs px-8 py-2 mt-6 bg-green-800 rounded-md relative group hover:text-outline-yellow"
+        >
+          Send now
+          <span className="absolute transform translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-xl">
+            🎄
+          </span>
+        </button>
       </div>
     </div>
   );

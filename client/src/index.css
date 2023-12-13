@@ -51,6 +51,10 @@
     -webkit-text-stroke: 1px black; /* 웹킷 브라우저 지원 */
     text-stroke: 1.3px black; /* 일반적인 브라우저 지원 */
   }
+  .text-outline-yellow {
+    -webkit-text-stroke: 0.8px yellow; /* 웹킷 브라우저 지원 */
+    text-stroke: 1px white; /* 일반적인 브라우저 지원 */
+  }
 /* Hide scrollbar for IE, Edge and Firefox */
   .no-scrollbar::-webkit-scrollbar {
     display: none;
