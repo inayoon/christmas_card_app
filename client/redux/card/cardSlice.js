@@ -6,6 +6,7 @@ const initialState = {
     index: null,
     title: null,
     url: null,
+    letter: "",
   },
 };
 
@@ -17,9 +18,13 @@ const cardSlice = createSlice({
       const { title, url, index } = action.payload;
       state.selectedCard = { title, url, index };
     },
+    saveLetter: (state, action) => {
+      const { letter } = action.payload;
+      state.selectedCard = { ...state.selectedCard, letter };
+    },
   },
 });
 
-export const { selectCard } = cardSlice.actions;
+export const { selectCard, saveLetter } = cardSlice.actions;
 export const selectCardState = (state) => state.card;
 export default cardSlice.reducer;

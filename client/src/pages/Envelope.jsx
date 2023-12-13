@@ -15,6 +15,7 @@ export default function Envelope() {
   const [imagePercent, setImagePercent] = useState(0);
   const [imageError, setImageError] = useState(false);
   const [envData, setEnvData] = useState({});
+  const [updateSuccess, setUpdateSuccess] = useState(false);
   const { currentUser } = useSelector((state) => state.user);
 
   useEffect(() => {
@@ -79,14 +80,16 @@ export default function Envelope() {
               onClick={() => fileRef.current.click()}
             />
           </div>
-          <p className="text-right mb-2">
+          <p className="text-sm self-center">
             {imageError ? (
-              <span className="text-green-700">
-                Error uploading image(file size)
+              <span className="text-white">
+                Error Uploading image (file size must be less than 4MB){" "}
               </span>
+            ) : imagePercent > 0 && imagePercent < 100 ? (
+              <span className="text-green-800">{`Uploading:${imagePercent} %`}</span>
             ) : imagePercent === 100 ? (
-              <span className="text-green-700 font-semibold">
-                Image Upload Successfully✨
+              <span className="text-green-800">
+                Image uploaded successfully
               </span>
             ) : (
               ""

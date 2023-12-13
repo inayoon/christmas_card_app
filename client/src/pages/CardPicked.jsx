@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { selectCardState, selectCard } from "../../redux/card/cardSlice.js";
+import {
+  selectCardState,
+  selectCard,
+  saveLetter,
+} from "../../redux/card/cardSlice.js";
 import cardData from "../data/card.json";
 
 export default function CardPicked() {
-  const { title, url } = useSelector(selectCardState).selectedCard;
+  const { title, url, letter } = useSelector(selectCardState).selectedCard;
   const [selectedImageTitle, setSelectedImageTitle] = useState(title);
-  const [letter, setLetter] = useState();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -21,6 +24,9 @@ export default function CardPicked() {
     navigate("/envelope");
   };
 
+  const handleLetterChange = (e) => {
+    dispatch(saveLetter(e.target.value));
+  };
   useEffect(() => {
     setSelectedImageTitle(title);
   }, [title]);
@@ -55,7 +61,7 @@ export default function CardPicked() {
           <textarea
             placeholder="Write your letter.."
             value={letter}
-            // onChange={handleLetterChange}
+            onChange={handleLetterChange}
             className="w-80 h-32 px-4 mt-4 py-2 rounded-lg shadow-md bg-lime-800 text-outline-white focus:outline-none focus:text-green-400 overflow-y-auto"
           />
         </div>
