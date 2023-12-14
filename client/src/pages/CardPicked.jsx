@@ -9,11 +9,12 @@ import {
 import cardData from "../data/card.json";
 
 export default function CardPicked() {
-  const { title, url, letter } = useSelector(selectCardState).selectedCard;
-  const [selectedImageTitle, setSelectedImageTitle] = useState(title);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const { title, url, letter } =
+    useSelector(selectCardState).selectedCard || {};
+  const [selectedImageTitle, setSelectedImageTitle] = useState(title);
+  //console.log(useSelector(selectCardState));
   const handleDropdownChange = (e) => {
     const selectedTitle = e.target.value;
     setSelectedImageTitle(selectedTitle);
@@ -25,7 +26,7 @@ export default function CardPicked() {
   };
 
   const handleLetterChange = (e) => {
-    dispatch(saveLetter(e.target.value));
+    dispatch(saveLetter({ letter: e.target.value }));
   };
   useEffect(() => {
     setSelectedImageTitle(title);
