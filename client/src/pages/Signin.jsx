@@ -4,7 +4,7 @@ import {
   signInStart,
   signInFailure,
 } from "../../redux/user/userSlice.js";
-import axios from "axios";
+
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import OAuth from "../components/OAuth.jsx";
@@ -22,14 +22,18 @@ export default function Signin() {
     e.preventDefault();
     try {
       dispatch(signInStart());
-      const response = await axios.post(
-        "http://localhost:3000/api/auth/signin",
-        form
-      );
-      if (response.data.success === false) {
-        dispatch(signInFailure(response.data));
+      const res = await fetch("/api/auth/signin", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
+      const data = await res.json();
+      if (data.success === false) {
+        return dispatch(signInFailure(data));
       }
-      dispatch(signInSuccess(response.data));
+      dispatch(signInSuccess(data));
       navigate("/");
     } catch (error) {
       dispatch(signInSuccess(error));

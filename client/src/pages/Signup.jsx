@@ -7,7 +7,6 @@ import {
   signUpFailure,
 } from "../../redux/user/userSlice";
 import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
 
 export default function Signup() {
   const [form, setForm] = useState({});
@@ -22,15 +21,19 @@ export default function Signup() {
     e.preventDefault();
     try {
       dispatch(signUpStart());
-      const response = await axios.post(
-        "http://localhost:3000/api/auth/signup",
-        form
-      );
+      const res = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
+      const data = await res.json();
 
-      if (response.data.success === false) {
-        dispatch(signUpFailure(response.data));
+      if (data.success === false) {
+        return dispatch(signUpFailure(data));
       }
-      dispatch(signUpSuccess(response.data));
+      dispatch(signUpSuccess(data));
       navigate("/sign-in");
     } catch (error) {
       dispatch(signUpFailure(error));

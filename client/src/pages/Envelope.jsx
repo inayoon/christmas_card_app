@@ -11,14 +11,14 @@ import { app } from "../firebase";
 import { v4 as uuidv4 } from "uuid";
 
 export default function Envelope() {
-  const { recipient, avatar } = useSelector(selectCardState).selectedCard;
+  const { recipient, avatar } = useSelector(selectCardState).selectedCard || {};
   const fileRef = useRef(null);
   const [image, setImage] = useState(undefined);
   const [imagePercent, setImagePercent] = useState(0);
   const [imageError, setImageError] = useState(false);
   const { currentUser } = useSelector((state) => state.user);
   const dispatch = useDispatch();
-
+  console.log(useSelector(selectCardState));
   useEffect(() => {
     if (image) {
       handleFileUpload(image);
@@ -28,7 +28,7 @@ export default function Envelope() {
     e.preventDefault();
   };
   const handleChange = (e) => {
-    dispatch(updateEnvelope({ [e.target.id]: e.target.value }));
+    dispatch(updateEnvelope({ recipient: e.target.value }));
   };
   const handleFileUpload = async (image) => {
     const storage = getStorage(app);

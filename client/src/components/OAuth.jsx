@@ -3,7 +3,6 @@ import { app } from "../firebase";
 import { useDispatch } from "react-redux";
 import { signInSuccess } from "../../redux/user/userSlice.js";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 
 export default function OAuth() {
   const dispatch = useDispatch();
@@ -14,15 +13,17 @@ export default function OAuth() {
       //firebase앱의 인증 객체를 가져옴
       const auth = getAuth(app);
       const result = await signInWithPopup(auth, provider);
-      const response = await axios.post(
-        "http://localhost:3000/api/auth/google",
-        {
+      const res = await fetch("/api/auth/google", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
           name: result.user.displayName,
           email: result.user.email,
           photo: result.user.photoURL,
-        }
-      );
-      dispatch(signInSuccess(response.data));
+        }),
+      });
+      const data = await res.json();
+      dispatch(signInSuccess(data));
       navigate("/");
     } catch (error) {
       console.log("Couldn't connect to Google", error);

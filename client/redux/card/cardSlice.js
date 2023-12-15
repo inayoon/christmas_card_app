@@ -26,7 +26,8 @@ const cardSlice = createSlice({
     },
     updateEnvelope: (state, action) => {
       const { recipient, avatar } = action.payload;
-      state.selectedCard = { ...state.selectedCard, recipient, avatar };
+      state.selectedCard.recipient = recipient;
+      state.selectedCard.avatar = avatar;
     },
   },
 });

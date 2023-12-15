@@ -14,13 +14,14 @@ export default function CardPicked() {
   const { title, url, letter } =
     useSelector(selectCardState).selectedCard || {};
   const [selectedImageTitle, setSelectedImageTitle] = useState(title);
-  //console.log(useSelector(selectCardState));
+
   const handleDropdownChange = (e) => {
     const selectedTitle = e.target.value;
     setSelectedImageTitle(selectedTitle);
     const selectedCard = cardData.find((card) => card.title === selectedTitle);
     dispatch(selectCard(selectedCard));
   };
+
   const handleAvatar = () => {
     navigate("/envelope");
   };
