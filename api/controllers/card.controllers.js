@@ -11,8 +11,7 @@ export const sendCard = async (req, res, next) => {
       return next(errorHandler(401, "User not authenticated"));
     }
     // const { title, url, letter, recipient, avatar } = req.body;
-    const { title, url, letter, recipient } = req.body;
-    console.log(req.body);
+    const { title, url, letter, recipient } = JSON.parse(req.body.cardData); // JSON 문자열을 파싱
     const newCard = new Card({
       title,
       url,
