@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect } from "react";
+import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { selectCardState, updateEnvelope } from "../../redux/card/cardSlice.js";
 import {
@@ -12,6 +13,7 @@ import { v4 as uuidv4 } from "uuid";
 
 export default function Envelope() {
   const { recipient, avatar } = useSelector(selectCardState).selectedCard || {};
+  const { title, url, letter } = useSelector(selectCardState).selectedCard;
   const fileRef = useRef(null);
   const [image, setImage] = useState(undefined);
   const [imagePercent, setImagePercent] = useState(0);
@@ -24,8 +26,38 @@ export default function Envelope() {
       handleFileUpload(image);
     }
   }, [image]);
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    try {
+      const cardData = {
+        recipient: recipient,
+        letter: letter,
+        url: url,
+        title: title,
+      };
+      const formData = new FormData();
+      formData.append("cardData", JSON.stringify(cardData));
+
+      // if (image) {
+      //   formData.append("avatar", avatar);
+      // }
+
+      const response = await axios.post("/api/card/send-card", formData, {
+        headers: {
+          "Content-Type": "application/json", // FormData를 사용하므로 이 헤더로 설정
+        },
+      });
+
+      const data = response.data;
+      if (data.success === false) {
+        console.log("Card sent failed");
+      } else {
+        console.log("Card sent successfully");
+      }
+    } catch (error) {
+      console.error("카드 전송 오류", error);
+    }
   };
   const handleChange = (e) => {
     dispatch(updateEnvelope({ recipient: e.target.value }));
@@ -35,6 +67,7 @@ export default function Envelope() {
     const fileName = uuidv4() + image.name;
     const storageRef = ref(storage, fileName);
     const uploadTask = uploadBytesResumable(storageRef, image);
+    const currentRecipient = recipient;
     uploadTask.on(
       "state_changed",
       (snapshot) => {
@@ -45,9 +78,10 @@ export default function Envelope() {
       (error) => {
         setImageError(true);
       },
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) =>
-          dispatch(updateEnvelope({ avatar: downloadURL }))
+      async () => {
+        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+        dispatch(
+          updateEnvelope({ recipient: currentRecipient, avatar: downloadURL })
         );
       }
     );
@@ -58,8 +92,8 @@ export default function Envelope() {
         <h1 className="text-2xl text-center mb-2 text-lime-900 text-outline-white">
           Add your picture beside From
         </h1>
-        <div className="mx-auto flex flex-col justify-between max-w-sm bg-amber-400 border-2 border-neutral-800 border-solid shadow-md">
-          <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit}>
+          <div className="mx-auto flex flex-col justify-between max-w-sm bg-amber-400 border-2 border-neutral-800 border-solid shadow-md">
             <div className="flex">
               <div className="p-4" id="home_banner">
                 🎄To.{" "}
@@ -70,6 +104,7 @@ export default function Envelope() {
                 id="recipient"
                 value={recipient}
                 placeholder="Recipient's name"
+                //recipient 값을 변경하는 부분
                 onChange={handleChange}
               />
             </div>
@@ -91,33 +126,35 @@ export default function Envelope() {
                 onClick={() => fileRef.current.click()}
               />
             </div>
-          </form>
-          <p className="text-sm self-center">
-            {imageError ? (
-              <span className="text-white">
-                Error Uploading image (file size must be less than 4MB){" "}
-              </span>
-            ) : imagePercent > 0 && imagePercent < 100 ? (
-              <span className="text-green-800">{`Uploading:${imagePercent} %`}</span>
-            ) : imagePercent === 100 ? (
-              <span className="text-green-800">
-                Image uploaded successfully
-              </span>
-            ) : (
-              ""
-            )}
-          </p>
-        </div>
 
-        <button
-          id="home"
-          className="text-lg text-outline-white mx-auto block max-w-xs px-8 py-2 mt-6 bg-green-800 rounded-md relative group hover:text-outline-yellow"
-        >
-          Send now
-          <span className="absolute transform translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-xl">
-            🎄
-          </span>
-        </button>
+            <p className="text-sm self-center">
+              {imageError ? (
+                <span className="text-white">
+                  Error Uploading image (file size must be less than 4MB){" "}
+                </span>
+              ) : imagePercent > 0 && imagePercent < 100 ? (
+                <span className="text-green-800">{`Uploading:${imagePercent} %`}</span>
+              ) : imagePercent === 100 ? (
+                <span className="text-green-800">
+                  Image uploaded successfully
+                </span>
+              ) : (
+                ""
+              )}
+            </p>
+          </div>
+
+          <button
+            type="submit"
+            id="home"
+            className="text-lg text-outline-white mx-auto block max-w-xs px-8 py-2 mt-6 bg-green-800 rounded-md relative group hover:text-outline-yellow"
+          >
+            Send now
+            <span className="absolute transform translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-xl">
+              🎄
+            </span>
+          </button>
+        </form>
       </div>
     </div>
   );

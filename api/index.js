@@ -1,10 +1,11 @@
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-// import cors from "cors";
+import cors from "cors";
 import cookieParser from "cookie-parser";
 import authRoutes from "./routes/auth.route.js";
 import userRoutes from "./routes/user.route.js";
+import cardRoutes from "./routes/card.route.js";
 dotenv.config();
 
 mongoose
@@ -15,11 +16,14 @@ mongoose
   .catch((error) => console.log(error));
 
 const app = express();
+app.use(cors());
 app.use(cookieParser());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/user", userRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/card", cardRoutes);
 
 //middleware to handle errors
 app.use((err, req, res, next) => {

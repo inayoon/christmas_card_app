@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import cardData from "../../src/data/card.json";
 
 const initialState = {
   selectedCard: {
@@ -26,8 +25,11 @@ const cardSlice = createSlice({
     },
     updateEnvelope: (state, action) => {
       const { recipient, avatar } = action.payload;
-      state.selectedCard.recipient = recipient;
-      state.selectedCard.avatar = avatar;
+      state.selectedCard = {
+        ...state.selectedCard,
+        recipient: recipient,
+        avatar: avatar !== undefined ? avatar : state.selectedCard.avatar,
+      };
     },
   },
 });
