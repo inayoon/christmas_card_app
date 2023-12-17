@@ -13,6 +13,7 @@ const persistConfig = {
   key: "root",
   version: 1,
   storage,
+  whitelist: ["user", "card"],
 };
 
 //create new reducer applying the persist configuration

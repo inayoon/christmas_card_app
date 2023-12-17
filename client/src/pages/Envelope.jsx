@@ -36,16 +36,13 @@ export default function Envelope() {
         url: url,
         title: title,
       };
+
       const formData = new FormData();
       formData.append("cardData", JSON.stringify(cardData));
 
-      // if (image) {
-      //   formData.append("avatar", avatar);
-      // }
-
       const response = await axios.post("/api/card/send-card", formData, {
         headers: {
-          "Content-Type": "application/json", // FormData를 사용하므로 이 헤더로 설정
+          "Content-Type": "application/json",
         },
       });
 
@@ -56,7 +53,7 @@ export default function Envelope() {
         console.log("Card sent successfully");
       }
     } catch (error) {
-      console.error("카드 전송 오류", error);
+      console.error("Error sending the card", error);
     }
   };
   const handleChange = (e) => {
@@ -104,7 +101,6 @@ export default function Envelope() {
                 id="recipient"
                 value={recipient}
                 placeholder="Recipient's name"
-                //recipient 값을 변경하는 부분
                 onChange={handleChange}
               />
             </div>

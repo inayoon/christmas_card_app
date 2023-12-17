@@ -7,19 +7,81 @@ import CardPicked from "./pages/CardPicked";
 import Header from "./components/Header";
 import PrivateRoute from "./components/PrivateRoute";
 import Envelope from "./pages/Envelope";
+import SentCard from "./pages/SentCard";
 function App() {
   return (
     <BrowserRouter>
-      <Header />
       <Routes>
-        <Route path="/" element={<Home />}></Route>
-        <Route path="/sign-in" element={<Signin />}></Route>
-        <Route path="/sign-up" element={<Signup />}></Route>
-        <Route path="/card-detail/:id" element={<CardPicked />}></Route>
-        <Route path="/envelope" element={<Envelope />}></Route>
-        <Route element={<PrivateRoute />}>
-          <Route path="/profile" element={<Profile />} />
+        <Route
+          path="/"
+          element={
+            <>
+              <Header /> <Home />
+            </>
+          }
+        ></Route>
+        <Route
+          path="/sign-in"
+          element={
+            <>
+              <Header />
+              <Signin />
+            </>
+          }
+        ></Route>
+        <Route
+          path="/sign-up"
+          element={
+            <>
+              <Header />
+              <Signup />
+            </>
+          }
+        ></Route>
+        <Route
+          path="/card-detail/:id"
+          element={
+            <>
+              <Header />
+              <CardPicked />
+            </>
+          }
+        ></Route>
+        <Route
+          path="/envelope"
+          element={
+            <>
+              <Header />
+              <Envelope />
+            </>
+          }
+        ></Route>
+        <Route
+          element={
+            <>
+              <Header />
+              <PrivateRoute />
+            </>
+          }
+        >
+          <Route
+            path="/profile"
+            element={
+              <>
+                <Header />
+                <Profile />
+              </>
+            }
+          />
         </Route>
+        <Route
+          path="/sent-card"
+          element={
+            <>
+              <SentCard />
+            </>
+          }
+        ></Route>
       </Routes>
     </BrowserRouter>
   );
