@@ -59,7 +59,6 @@ function App() {
         <Route
           element={
             <>
-              <Header />
               <PrivateRoute />
             </>
           }
