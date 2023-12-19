@@ -35,7 +35,7 @@ export default function CardPicked() {
 
   return (
     <div className="flex h-screen items-center justify-center pt-8">
-      <div className="bg-red-700 w-1/2 h-full p-8 rounded-2xl shadow-lg mb-8 flex flex-col overflow-y-auto no-scrollbar">
+      <div className="bg-red-700 w-1/3 h-full p-8 rounded-2xl shadow-lg mb-8 flex flex-col overflow-y-auto no-scrollbar">
         <div
           className="text-center text-3xl text-green-700 text-outline-white"
           id="home"
@@ -73,9 +73,6 @@ export default function CardPicked() {
             className="bg-lime-700 rounded-lg mt-2 p-2 shadow-md text-white flex-shrink-0"
           >
             Add your avatar
-          </button>
-          <button className="bg-lime-700 rounded-lg mt-2 py-2 px-6 shadow-md text-white flex-shrink-0">
-            Send
           </button>
         </div>
       </div>

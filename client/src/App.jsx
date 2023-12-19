@@ -74,7 +74,7 @@ function App() {
           />
         </Route>
         <Route
-          path="/sent-card"
+          path="/sent-card/:cardId"
           element={
             <>
               <SentCard />

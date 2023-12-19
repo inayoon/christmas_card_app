@@ -2,6 +2,25 @@ import { errorHandler } from "../utils/error.js";
 import Card from "../models/card.model.js";
 import User from "../models/user.model.js";
 
+export const getCardById = async (req, res, next) => {
+  try {
+    const { cardId } = req.params;
+    console.log(`Fetching card with ID: ${cardId}`);
+
+    const card = await Card.findById(cardId);
+
+    if (!card) {
+      console.log("Card not found");
+      return next(errorHandler(404, "Card not found"));
+    }
+    console.log("Card found:", card);
+    res.status(200).json(card);
+  } catch (error) {
+    console.error("Error fetching card:", error);
+    next(error);
+  }
+};
+
 export const sendCard = async (req, res, next) => {
   try {
     const userId = req.user?.id;
@@ -19,6 +38,9 @@ export const sendCard = async (req, res, next) => {
       sender: userId,
     });
     await newCard.save();
+    res
+      .status(201)
+      .json({ message: "Card successfully saved", cardId: newCard._id });
 
     await User.findByIdAndUpdate(
       userId,

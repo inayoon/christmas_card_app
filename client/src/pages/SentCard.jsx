@@ -2,24 +2,40 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { selectCardState } from "../../redux/card/cardSlice.js";
 import axios from "axios";
-import "./SentCard.css";
+import { useParams } from "react-router-dom";
 
 export default function SentCard() {
+  const { cardId } = useParams();
+  const [cardData, setCardData] = useState({});
+  console.log(cardData);
   const [isCardVisible, setIsCardVisible] = useState(false);
   const { avatar, letter, url, recipient } =
     useSelector(selectCardState).selectedCard || {};
+  useEffect(() => {
+    const fetchCard = async () => {
+      try {
+        const response = await axios.get(`/api/card/sent-card/${cardId}`);
+        const fetchedCardData = response.data;
+        setCardData(fetchedCardData);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchCard();
+  }, [cardId]);
+
   const handleOpenClick = () => {
     setIsCardVisible(true);
     setTimeout(() => {
       setIsCardVisible(true);
     }, 500);
   };
-  console.log(useSelector(selectCardState));
+  //console.log(useSelector(selectCardState));
   return (
     <div className="flex items-center justify-center pt-8 h-full">
       <div className="bg-red-700  w-1/2  p-8 rounded-2xl shadow-lg mb-8 h-full">
         <h1 className="text-2xl text-center mb-2 text-lime-900 text-outline-white">
-          {`A letter has arrived for ${recipient}`}
+          {`A letter has arrived for ${cardData.recipient}`}
         </h1>
         <div className="mx-auto flex flex-col justify-between max-w-sm bg-amber-400 border-2 border-neutral-800 border-solid shadow-md">
           <div className="flex">
@@ -56,7 +72,7 @@ export default function SentCard() {
         {isCardVisible && (
           <div className="max-w-xs mx-auto overflow-hidden ">
             <img src={url} />
-            <div className="bg-lime-900 text-white rounded-md shadow-lg text-center">
+            <div className="bg-lime-900 text-white rounded-md shadow-lg text-center p-4 mt-1">
               {letter}
             </div>
           </div>

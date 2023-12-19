@@ -14,10 +14,13 @@ import { v4 as uuidv4 } from "uuid";
 export default function Envelope() {
   const { recipient, avatar } = useSelector(selectCardState).selectedCard || {};
   const { title, url, letter } = useSelector(selectCardState).selectedCard;
+  const [cardId, setCardId] = useState("");
+  const [sentCardURL, setsentCardURL] = useState("");
   const fileRef = useRef(null);
   const [image, setImage] = useState(undefined);
   const [imagePercent, setImagePercent] = useState(0);
   const [imageError, setImageError] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const { currentUser } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   console.log(useSelector(selectCardState));
@@ -50,8 +53,13 @@ export default function Envelope() {
       if (data.success === false) {
         console.log("Card sent failed");
       } else {
+        const newCardId = data.cardId;
+        setCardId(newCardId);
+        const cardURL = `http://localhost:5173/sent-card/${newCardId}`;
+        setsentCardURL(cardURL);
         console.log("Card sent successfully");
       }
+      setIsModalVisible(true);
     } catch (error) {
       console.error("Error sending the card", error);
     }
@@ -83,9 +91,21 @@ export default function Envelope() {
       }
     );
   };
+  const closeModal = () => {
+    // 모달을 감추도록 설정
+    setIsModalVisible(false);
+  };
+  const copyToClipboard = (text) => {
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    document.body.appendChild(textArea);
+    textArea.select();
+    document.execCommand("copy");
+    document.body.removeChild(textArea);
+  };
   return (
     <div className="flex items-center justify-center pt-8 h-full">
-      <div className="bg-red-700  w-1/2  p-8 rounded-2xl shadow-lg mb-8 h-full">
+      <div className="bg-red-700  w-1/3  p-8 rounded-2xl shadow-lg mb-8 h-full">
         <h1 className="text-2xl text-center mb-2 text-lime-900 text-outline-white">
           Add your picture beside From
         </h1>
@@ -117,7 +137,7 @@ export default function Envelope() {
               />
               <img
                 className="h-14 w-14  self-center cursor-pointer rounded-full object-cover"
-                src={avatar || currentUser.profilePicture}
+                src={(avatar && avatar) || currentUser.profilePicture}
                 alt="avatar"
                 onClick={() => fileRef.current.click()}
               />
@@ -152,6 +172,39 @@ export default function Envelope() {
           </button>
         </form>
       </div>
+      {isModalVisible && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="absolute inset-0 bg-gray-600 opacity-75"></div>
+          <div className="relative bg-white p-8 max-w-md rounded-md">
+            <p className="text-lg font-semibold mb-4 text-center">
+              💌💨
+              <br />
+              The letter has been written!
+              <br /> Please share it now!
+            </p>
+
+            <div className="flex items-center mb-4">
+              <span className="mr-2 overflow-hidden overflow-ellipsis max-w-xs">
+                {sentCardURL}
+              </span>
+
+              {/* 복사 버튼 */}
+              <button
+                onClick={() => copyToClipboard(sentCardURL)}
+                className="bg-blue-500 text-white px-4 py-2 rounded-md"
+              >
+                Copy URL
+              </button>
+            </div>
+            <button
+              onClick={closeModal}
+              className="bg-red-700 text-white px-4 py-2 rounded-md mx-auto block"
+            >
+              Close Modal
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

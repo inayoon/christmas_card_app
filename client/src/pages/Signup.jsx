@@ -1,18 +1,12 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import OAuth from "../components/OAuth";
-import {
-  signUpStart,
-  signUpSuccess,
-  signUpFailure,
-} from "../../redux/user/userSlice";
-import { useDispatch, useSelector } from "react-redux";
 
 export default function Signup() {
   const [form, setForm] = useState({});
-  const { loading, error } = useSelector((state) => state.user);
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const handleChange = (e) => {
     const { id, value } = e.target;
     setForm({ ...form, [id]: value });
@@ -20,7 +14,9 @@ export default function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      dispatch(signUpStart());
+      setLoading(true);
+      setError(false);
+      //fetch 말고 axios 사용하는걸로 나중에 바꿔보기
       const res = await fetch("/api/auth/signup", {
         method: "POST",
         headers: {
@@ -29,16 +25,17 @@ export default function Signup() {
         body: JSON.stringify(form),
       });
       const data = await res.json();
-
+      setLoading(false);
       if (data.success === false) {
-        return dispatch(signUpFailure(data));
+        return setError(true);
       }
-      dispatch(signUpSuccess(data));
       navigate("/sign-in");
     } catch (error) {
-      dispatch(signUpFailure(error));
+      setLoading(false);
+      setError(true);
     }
   };
+
   return (
     <div className="p-4 mx-auto max-w-lg">
       <h1 className="text-4xl text-center my-4 text-teal-600">Sign Up</h1>

@@ -7,7 +7,7 @@ const initialState = {
     url: null,
     letter: undefined,
     recipient: undefined,
-    avatar: undefined,
+    avatar: "",
   },
 };
 
