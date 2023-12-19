@@ -1,7 +1,12 @@
 import { useRef, useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
-import { selectCardState, updateEnvelope } from "../../redux/card/cardSlice.js";
+import {
+  selectCardState,
+  updateEnvelope,
+  resetCard,
+} from "../../redux/card/cardSlice.js";
 import {
   getDownloadURL,
   getStorage,
@@ -38,10 +43,12 @@ export default function Envelope() {
         letter: letter,
         url: url,
         title: title,
+        avatar: avatar,
       };
 
       const formData = new FormData();
       formData.append("cardData", JSON.stringify(cardData));
+      await handleFileUpload(image);
 
       const response = await axios.post("/api/card/send-card", formData, {
         headers: {
@@ -91,9 +98,8 @@ export default function Envelope() {
       }
     );
   };
-  const closeModal = () => {
-    // 모달을 감추도록 설정
-    setIsModalVisible(false);
+  const handleReset = () => {
+    dispatch(resetCard());
   };
   const copyToClipboard = (text) => {
     const textArea = document.createElement("textarea");
@@ -137,7 +143,7 @@ export default function Envelope() {
               />
               <img
                 className="h-14 w-14  self-center cursor-pointer rounded-full object-cover"
-                src={(avatar && avatar) || currentUser.profilePicture}
+                src={avatar || currentUser.profilePicture}
                 alt="avatar"
                 onClick={() => fileRef.current.click()}
               />
@@ -196,12 +202,14 @@ export default function Envelope() {
                 Copy URL
               </button>
             </div>
-            <button
-              onClick={closeModal}
-              className="bg-red-700 text-white px-4 py-2 rounded-md mx-auto block"
-            >
-              Close Modal
-            </button>
+            <Link to="/">
+              <button
+                onClick={handleReset}
+                className="bg-red-700 text-white px-4 py-2 rounded-md mx-auto block"
+              >
+                Go to Home
+              </button>
+            </Link>
           </div>
         </div>
       )}

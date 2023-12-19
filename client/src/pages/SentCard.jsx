@@ -9,8 +9,7 @@ export default function SentCard() {
   const [cardData, setCardData] = useState({});
   console.log(cardData);
   const [isCardVisible, setIsCardVisible] = useState(false);
-  const { avatar, letter, url, recipient } =
-    useSelector(selectCardState).selectedCard || {};
+  const { avatar } = useSelector(selectCardState).selectedCard || {};
   useEffect(() => {
     const fetchCard = async () => {
       try {
@@ -46,7 +45,7 @@ export default function SentCard() {
               className="mt-1 p-2 bg-transparent border-b-2 border-neutral-800
               w-32 h-12 text-sm text-white"
             >
-              {recipient}
+              {cardData.recipient}
             </div>
           </div>
           <div className="flex justify-end mx-8 mt-32 pb-2">
@@ -56,7 +55,7 @@ export default function SentCard() {
 
             <img
               className="h-14 w-14  self-center rounded-full object-cover"
-              src={avatar}
+              src={cardData.avatar}
               alt="avatar"
             />
           </div>
@@ -71,9 +70,9 @@ export default function SentCard() {
         {/* card div */}
         {isCardVisible && (
           <div className="max-w-xs mx-auto overflow-hidden ">
-            <img src={url} />
+            <img src={cardData.url} />
             <div className="bg-lime-900 text-white rounded-md shadow-lg text-center p-4 mt-1">
-              {letter}
+              {cardData.letter}
             </div>
           </div>
         )}

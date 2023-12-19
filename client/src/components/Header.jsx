@@ -4,7 +4,6 @@ import { userState } from "../../redux/user/userSlice.js";
 
 export default function Header() {
   const { currentUser } = useSelector(userState);
-  console.log(currentUser);
   return (
     <div className="bg-red-700 py-2">
       <div className="flex justify-between items-center max-w-6xl p-4">

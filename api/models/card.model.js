@@ -6,6 +6,7 @@ const cardSchema = new mongoose.Schema(
     url: String,
     letter: String,
     recipient: String,
+    avatar: String,
     sender: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

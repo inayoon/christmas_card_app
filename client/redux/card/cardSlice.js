@@ -31,9 +31,13 @@ const cardSlice = createSlice({
         avatar: avatar !== undefined ? avatar : state.selectedCard.avatar,
       };
     },
+    resetCard: (state) => {
+      state.selectedCard = initialState.selectedCard;
+    },
   },
 });
 
-export const { selectCard, saveLetter, updateEnvelope } = cardSlice.actions;
+export const { selectCard, saveLetter, updateEnvelope, resetCard } =
+  cardSlice.actions;
 export const selectCardState = (state) => state.card;
 export default cardSlice.reducer;

@@ -29,12 +29,16 @@ export const sendCard = async (req, res, next) => {
       // req.user가 정의되어 있지 않거나 _id 속성이 없는 경우
       return next(errorHandler(401, "User not authenticated"));
     }
-    const { title, url, letter, recipient } = JSON.parse(req.body.cardData);
+    const { title, url, letter, recipient, avatar } = JSON.parse(
+      req.body.cardData
+    );
+
     const newCard = new Card({
       title,
       url,
       letter,
       recipient,
+      avatar,
       sender: userId,
     });
     await newCard.save();
