@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
+import { userState } from "../../redux/user/userSlice";
 import Card from "../components/Card";
 
 export default function Home() {
-  const [sentCard, setSentCard] = useState(0);
+  const { sentCard } = useSelector(userState);
   const [visibleCard, setVisibleCard] = useState(3);
   const [selectedCard, setSelectedCard] = useState(null);
   const handleLoadMore = () => {

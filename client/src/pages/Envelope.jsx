@@ -7,6 +7,7 @@ import {
   updateEnvelope,
   resetCard,
 } from "../../redux/card/cardSlice.js";
+import { countCard } from "../../redux/user/userSlice.js";
 import {
   getDownloadURL,
   getStorage,
@@ -28,7 +29,7 @@ export default function Envelope() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { currentUser } = useSelector((state) => state.user);
   const dispatch = useDispatch();
-  console.log(useSelector(selectCardState));
+
   useEffect(() => {
     if (image) {
       handleFileUpload(image);
@@ -55,7 +56,7 @@ export default function Envelope() {
           "Content-Type": "application/json",
         },
       });
-
+      dispatch(countCard());
       const data = response.data;
       if (data.success === false) {
         console.log("Card sent failed");
