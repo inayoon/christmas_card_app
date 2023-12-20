@@ -1,19 +1,24 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { userState } from "../../redux/user/userSlice";
 import Card from "../components/Card";
 
 export default function Home() {
+  const navigate = useNavigate();
   const { sentCard } = useSelector(userState);
   const [visibleCard, setVisibleCard] = useState(3);
   const [selectedCard, setSelectedCard] = useState(null);
+  const { currentUser } = useSelector((state) => state.user);
   const handleLoadMore = () => {
     setVisibleCard((prev) => prev + 3);
   };
   const handleCardSelect = (index) => {
     setSelectedCard(index);
   };
-
+  const handleClick = () => {
+    navigate(`/history/${currentUser._id}`);
+  };
   return (
     <div>
       <p
@@ -33,7 +38,10 @@ export default function Home() {
         id="home_banner"
       >
         Sent{" "}
-        <span className="text-red-700 underline decoration-dashed decoration-red-700 font-bold text-lg">
+        <span
+          onClick={handleClick}
+          className="text-red-700 underline decoration-dashed decoration-red-700 font-bold text-lg cursor-pointer"
+        >
           {sentCard}
         </span>{" "}
         cards so far!

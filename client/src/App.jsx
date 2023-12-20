@@ -8,6 +8,7 @@ import Header from "./components/Header";
 import PrivateRoute from "./components/PrivateRoute";
 import Envelope from "./pages/Envelope";
 import SentCard from "./pages/SentCard";
+import History from "./pages/History";
 function App() {
   return (
     <BrowserRouter>
@@ -81,6 +82,15 @@ function App() {
             </>
           }
         ></Route>
+        <Route
+          path="/history/:userId"
+          element={
+            <>
+              <Header />
+              <History />
+            </>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );

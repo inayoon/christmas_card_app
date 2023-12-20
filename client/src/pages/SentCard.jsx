@@ -9,7 +9,7 @@ export default function SentCard() {
   const [cardData, setCardData] = useState({});
   console.log(cardData);
   const [isCardVisible, setIsCardVisible] = useState(false);
-  const { avatar } = useSelector(selectCardState).selectedCard || {};
+
   useEffect(() => {
     const fetchCard = async () => {
       try {
