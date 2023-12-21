@@ -8,6 +8,11 @@ export default function History() {
   const allCards = location.state;
   console.log(allCards);
   const [history, setHistory] = useState({});
+  const extractDate = (createdAt) => {
+    const dateObj = new Date(createdAt);
+    const formattedDate = dateObj.toISOString().split("T")[0];
+    return formattedDate;
+  };
 
   // useEffect(() => {
   //   const fetchCards = async () => {
@@ -31,17 +36,20 @@ export default function History() {
       <div className="flex justify-center">
         <ul className="flex gap-4 transition-all">
           {allCards.map((card, index) => (
-            <li key={index} className=" hover:scale-105 overflow-hidden ">
+            <li key={index} className=" hover:scale-105 ">
               <img
-                className="rounded-lg shadow-md cursor-pointer w-60 h-40"
+                className="rounded-lg shadow-lg cursor-pointer w-60 h-40  overflow-hidden"
                 key={index}
                 src={card.url}
               />
+              <div className="mt-2 rounded-xl  bg-emerald-200 text-center py-1">
+                <p className="font-bold">To. {card.recipient}</p>
+                <p id="home_banner">Date: {extractDate(card.createdAt)}</p>
+              </div>
             </li>
           ))}
         </ul>
       </div>
-      {/* <Stamp history={history} /> */}
     </div>
   );
 }
