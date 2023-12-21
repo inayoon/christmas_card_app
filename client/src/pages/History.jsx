@@ -1,13 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { useParams, useLocation } from "react-router-dom";
-import axios from "axios";
-import Stamp from "../components/Stamp";
+import { useLocation } from "react-router-dom";
 
 export default function History() {
   const location = useLocation();
   const allCards = location.state;
-  console.log(allCards);
-  const [history, setHistory] = useState({});
   const extractDate = (createdAt) => {
     const dateObj = new Date(createdAt);
     const formattedDate = dateObj.toISOString().split("T")[0];
@@ -42,7 +37,7 @@ export default function History() {
                 key={index}
                 src={card.url}
               />
-              <div className="mt-2 rounded-xl  bg-emerald-200 text-center py-1">
+              <div className="mt-2 rounded-xl  bg-emerald-200 text-center py-1 shadow-lg">
                 <p className="font-bold">To. {card.recipient}</p>
                 <p id="home_banner">Date: {extractDate(card.createdAt)}</p>
               </div>
