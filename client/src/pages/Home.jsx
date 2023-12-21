@@ -1,15 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { userState } from "../../redux/user/userSlice";
+import { selectCardState } from "../../redux/card/cardSlice";
+import axios from "axios";
 import Card from "../components/Card";
 
 export default function Home() {
   const navigate = useNavigate();
-  const { sentCard } = useSelector(userState);
+  const [cardsNum, setCardsNum] = useState(0);
   const [visibleCard, setVisibleCard] = useState(3);
   const [selectedCard, setSelectedCard] = useState(null);
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser } = useSelector(userState);
   const handleLoadMore = () => {
     setVisibleCard((prev) => prev + 3);
   };
@@ -19,6 +21,28 @@ export default function Home() {
   const handleClick = () => {
     navigate(`/history/${currentUser._id}`);
   };
+  useEffect(() => {
+    const getAll = async () => {
+      try {
+        // currentUser가 null이 아닐 때에만 API 호출을 수행합니다.
+        if (currentUser) {
+          const response = await axios.get(
+            `/api/card/getAllCard/${currentUser._id}`
+          );
+          const data = response.data;
+          setCardsNum(data);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    // currentUser가 변경될 때에만 효과를 다시 실행하도록 처리합니다.
+    if (currentUser) {
+      getAll();
+    }
+  }, [currentUser]);
+
   return (
     <div>
       <p
@@ -42,7 +66,7 @@ export default function Home() {
           onClick={handleClick}
           className="text-red-700 underline decoration-dashed decoration-red-700 font-bold text-lg cursor-pointer"
         >
-          {sentCard}
+          {currentUser === null ? 0 : cardsNum.length}
         </span>{" "}
         cards so far!
       </div>

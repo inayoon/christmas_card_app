@@ -7,7 +7,6 @@ import {
   updateEnvelope,
   resetCard,
 } from "../../redux/card/cardSlice.js";
-import { countCard } from "../../redux/user/userSlice.js";
 import {
   getDownloadURL,
   getStorage,
@@ -56,7 +55,6 @@ export default function Envelope() {
           "Content-Type": "application/json",
         },
       });
-      dispatch(countCard());
       const data = response.data;
       if (data.success === false) {
         console.log("Card sent failed");

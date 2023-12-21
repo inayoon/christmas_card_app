@@ -2,12 +2,24 @@ import { errorHandler } from "../utils/error.js";
 import Card from "../models/card.model.js";
 import User from "../models/user.model.js";
 
+export const getAllCards = async (req, res, next) => {
+  try {
+    const userId = req.params.userId;
+    const userCards = await Card.find({ sender: userId });
+    res.status(200).json(userCards);
+  } catch (error) {
+    console.error("Error fetching cards:", error);
+    next(error);
+  }
+};
+
 export const getCardsById = async (req, res, next) => {
   try {
     const { userId } = req.params;
     const userData = await User.findById(userId)
       .select("-password")
       .populate("cards");
+    console.log(userData);
     if (!userData) {
       return res.status(404).json({ message: "User not found" });
     }

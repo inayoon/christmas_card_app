@@ -12,8 +12,8 @@ export default function History() {
       try {
         const response = await axios.get(`/api/card/history/${userId}`);
         const fetchedCardsData = response.data.cards;
+        console.log(fetchedCardsData);
         setHistory(fetchedCardsData);
-        console.log(history);
       } catch (err) {
         console.log(err);
       }

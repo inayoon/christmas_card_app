@@ -3,7 +3,6 @@ const initialState = {
   currentUser: null,
   loading: false,
   error: false,
-  sentCard: 0,
 };
 
 const userSlice = createSlice({
@@ -39,9 +38,6 @@ const userSlice = createSlice({
       state.loading = false;
       state.error = false;
     },
-    countCard: (state) => {
-      state.sentCard += 1;
-    },
   },
 });
 
@@ -53,7 +49,7 @@ export const {
   deleteUserSuccess,
   deleteUserFailure,
   signOut,
-  countCard,
+  getSentCardCount,
 } = userSlice.actions;
 export const userState = (state) => state.user;
 export default userSlice.reducer;
