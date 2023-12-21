@@ -60,18 +60,6 @@ export default function Profile() {
           id="email"
           placeholder="Email"
         />
-        <input
-          className="bg-emerald-600  p-4 rounded-lg text-white placeholder-white shadow-md"
-          type="password"
-          id="password"
-          placeholder="Password"
-        />
-        <button className="bg-red-700 text-white p-3 rounded-lg hover:text-yellow-300 hover:font-bold disabled:opacity-60 relative group">
-          Update
-          <span className="absolute right-60 top-0 transform translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-xl">
-            🎄
-          </span>
-        </button>
       </form>
       <div className="flex justify-between mt-2">
         <span

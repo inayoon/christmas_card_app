@@ -52,8 +52,8 @@ export default function CardPicked() {
             value={selectedImageTitle}
             onChange={handleDropdownChange}
           >
-            {cardData.map((card) => (
-              <option key={card.index} value={card.title}>
+            {cardData.map((card, index) => (
+              <option key={index} value={card.title}>
                 {card.title}
               </option>
             ))}

@@ -29,7 +29,7 @@ export default function History() {
         Sent Items
       </h1>
       <div className="flex justify-center">
-        <ul className="flex gap-4 transition-all">
+        <ul className="flex justify-center gap-4 transition-all flex-wrap ">
           {allCards.map((card, index) => (
             <li key={index} className=" hover:scale-105 ">
               <img
@@ -37,9 +37,11 @@ export default function History() {
                 key={index}
                 src={card.url}
               />
-              <div className="mt-2 rounded-xl  bg-emerald-200 text-center py-1 shadow-lg">
-                <p className="font-bold">To. {card.recipient}</p>
-                <p id="home_banner">Date: {extractDate(card.createdAt)}</p>
+              <div className="mt-2 rounded-xl  bg-green-800 text-center py-1 shadow-lg mb-1">
+                <p className="font-bold text-white">To. {card.recipient}</p>
+                <p className="text-white" id="home_banner">
+                  Date: {extractDate(card.createdAt)}
+                </p>
               </div>
             </li>
           ))}

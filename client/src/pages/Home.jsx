@@ -19,7 +19,11 @@ export default function Home() {
     setSelectedCard(index);
   };
   const handleClick = () => {
-    navigate(`/history/${currentUser._id}`, { state: allCards });
+    if (currentUser) {
+      navigate(`/history/${currentUser._id}`, { state: allCards });
+    } else {
+      navigate("/");
+    }
   };
   useEffect(() => {
     const getAll = async () => {
