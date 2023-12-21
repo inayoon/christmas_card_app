@@ -8,7 +8,7 @@ import Card from "../components/Card";
 
 export default function Home() {
   const navigate = useNavigate();
-  const [cardsNum, setCardsNum] = useState(0);
+  const [allCards, setallCards] = useState(0);
   const [visibleCard, setVisibleCard] = useState(3);
   const [selectedCard, setSelectedCard] = useState(null);
   const { currentUser } = useSelector(userState);
@@ -19,7 +19,7 @@ export default function Home() {
     setSelectedCard(index);
   };
   const handleClick = () => {
-    navigate(`/history/${currentUser._id}`);
+    navigate(`/history/${currentUser._id}`, { state: allCards });
   };
   useEffect(() => {
     const getAll = async () => {
@@ -30,7 +30,7 @@ export default function Home() {
             `/api/card/getAllCard/${currentUser._id}`
           );
           const data = response.data;
-          setCardsNum(data);
+          setallCards(data);
         }
       } catch (err) {
         console.log(err);
@@ -66,7 +66,7 @@ export default function Home() {
           onClick={handleClick}
           className="text-red-700 underline decoration-dashed decoration-red-700 font-bold text-lg cursor-pointer"
         >
-          {currentUser === null ? 0 : cardsNum.length}
+          {currentUser === null ? 0 : allCards.length}
         </span>{" "}
         cards so far!
       </div>
