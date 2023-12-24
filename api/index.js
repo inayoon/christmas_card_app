@@ -41,6 +41,7 @@ app.get("*", (req, res) => {
     return res.status(404).send("Not Found");
   }
 
+  app.use(express.static(path.join(__dirname, "client", "dist")));
   // 그 외의 경우에는 클라이언트 사이드 라우팅을 위해 index.html을 반환
   res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
 });
