@@ -35,13 +35,14 @@ app.use("/api/user", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/card", cardRoutes);
 
+app.use(express.static(path.join(__dirname, "client", "dist")));
+
 app.get("*", (req, res) => {
   if (req.originalUrl.startsWith("/api")) {
     // API 요청은 클라이언트 사이드 라우팅에 영향을 주지 않음
     return res.status(404).send("Not Found");
   }
 
-  app.use(express.static(path.join(__dirname, "client", "dist")));
   // 그 외의 경우에는 클라이언트 사이드 라우팅을 위해 index.html을 반환
   res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
 });
