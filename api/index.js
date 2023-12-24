@@ -18,10 +18,14 @@ mongoose
 
 const __dirname = path.resolve();
 const app = express();
-app.use(express.static(path.join(__dirname, "/client/dist")));
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
-});
+
+//여기부터 // app.use(express.static(path.join(__dirname, "/client/dist")));
+// app.use(express.static(path.join(__dirname, "client", "dist")));
+
+// app.get("*", (req, res) => {
+//   res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
+// 여기까지});
+
 app.use(cors());
 app.use(cookieParser());
 app.use(express.json());
@@ -30,6 +34,16 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/user", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/card", cardRoutes);
+
+app.get("*", (req, res) => {
+  if (req.originalUrl.startsWith("/api")) {
+    // API 요청은 클라이언트 사이드 라우팅에 영향을 주지 않음
+    return res.status(404).send("Not Found");
+  }
+
+  // 그 외의 경우에는 클라이언트 사이드 라우팅을 위해 index.html을 반환
+  res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
+});
 
 //middleware to handle errors
 app.use((err, req, res, next) => {

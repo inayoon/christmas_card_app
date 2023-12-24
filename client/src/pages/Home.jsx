@@ -8,7 +8,7 @@ import Card from "../components/Card";
 
 export default function Home() {
   const navigate = useNavigate();
-  const [allCards, setallCards] = useState(0);
+  const [allCards, setAllCards] = useState(0);
   const [visibleCard, setVisibleCard] = useState(3);
   const [selectedCard, setSelectedCard] = useState(null);
   const { currentUser } = useSelector(userState);
@@ -25,30 +25,49 @@ export default function Home() {
       navigate("/");
     }
   };
-  useEffect(() => {
-    const getAll = async () => {
-      try {
-        // currentUser가 null이 아닐 때에만 API 호출을 수행합니다.
-        if (currentUser) {
-          const response = await axios.get(
-            `/api/card/getAllCard/${currentUser._id}`,
-            {
-              withCredentials: true, // 자격 증명 포함
-            }
-          );
-          const data = response.data;
-          setallCards(data);
+  const getNumberOfCards = async () => {
+    if (currentUser._id) {
+      const response = await axios.get(
+        `/api/card/getAllCard/${currentUser._id}`,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json", // JSON 형식의 헤더 추가
+            // 추가적인 헤더가 필요하다면 여기에 추가
+          },
         }
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
-    // currentUser가 변경될 때에만 효과를 다시 실행하도록 처리합니다.
-    if (currentUser) {
-      getAll();
+      );
+      const data = response.data;
+      setAllCards(data);
+      console.log(data);
     }
-  }, [currentUser]);
+  };
+  useEffect(() => {
+    getNumberOfCards();
+  }, []);
+
+  // useEffect(() => {
+  //   const getAll = async () => {
+  //     try {
+  //       // currentUser가 null이 아닐 때에만 API 호출을 수행합니다.
+  //       if (currentUser._id) {
+  //         const response = await axios.get(
+  //           `/api/card/getAllCard/${currentUser._id}`,
+  //           {
+  //             withCredentials: true, // 자격 증명 포함
+  //           }
+  //         );
+  //         const data = response.data;
+  //         setallCards(data);
+  //       }
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
+  //   };
+  //   if (currentUser._id) {
+  //     getAll();
+  //   }
+  // }, [currentUser]);
 
   return (
     <div>
