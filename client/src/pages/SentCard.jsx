@@ -13,7 +13,9 @@ export default function SentCard() {
   useEffect(() => {
     const fetchCard = async () => {
       try {
-        const response = await axios.get(`/api/card/sent-card/${cardId}`);
+        const response = await axios.get(`/api/card/sent-card/${cardId}`, {
+          withCredentials: true, // 자격 증명 포함
+        });
         const fetchedCardData = response.data;
         setCardData(fetchedCardData);
       } catch (err) {

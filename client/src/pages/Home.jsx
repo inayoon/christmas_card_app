@@ -31,7 +31,10 @@ export default function Home() {
         // currentUser가 null이 아닐 때에만 API 호출을 수행합니다.
         if (currentUser) {
           const response = await axios.get(
-            `/api/card/getAllCard/${currentUser._id}`
+            `/api/card/getAllCard/${currentUser._id}`,
+            {
+              withCredentials: true, // 자격 증명 포함
+            }
           );
           const data = response.data;
           setallCards(data);

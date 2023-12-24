@@ -61,7 +61,7 @@ export default function Envelope() {
       } else {
         const newCardId = data.cardId;
         setCardId(newCardId);
-        const cardURL = `http://localhost:5173/sent-card/${newCardId}`;
+        const cardURL = `https://christmas-card-app.onrender.com/sent-card/${newCardId}`;
         setsentCardURL(cardURL);
         console.log("Card sent successfully");
       }
