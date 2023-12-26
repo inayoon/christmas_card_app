@@ -39,7 +39,6 @@ export default function Home() {
       );
       const data = response.data;
       setAllCards(data);
-      console.log(data);
     }
   };
   useEffect(() => {

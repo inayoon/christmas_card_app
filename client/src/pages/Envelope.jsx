@@ -51,6 +51,7 @@ export default function Envelope() {
       await handleFileUpload(image);
 
       const response = await axios.post("/api/card/send-card", formData, {
+        // withCredentials: true,
         headers: {
           "Content-Type": "application/json",
         },

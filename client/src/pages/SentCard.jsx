@@ -7,14 +7,13 @@ import { useParams } from "react-router-dom";
 export default function SentCard() {
   const { cardId } = useParams();
   const [cardData, setCardData] = useState({});
-  console.log(cardData);
   const [isCardVisible, setIsCardVisible] = useState(false);
 
   useEffect(() => {
     const fetchCard = async () => {
       try {
         const response = await axios.get(`/api/card/sent-card/${cardId}`, {
-          withCredentials: true, // 자격 증명 포함
+          withCredentials: true,
         });
         const fetchedCardData = response.data;
         setCardData(fetchedCardData);
@@ -26,16 +25,12 @@ export default function SentCard() {
   }, [cardId]);
 
   const handleOpenClick = () => {
-    setIsCardVisible(true);
-    setTimeout(() => {
-      setIsCardVisible(true);
-    }, 500);
+    setIsCardVisible(!isCardVisible);
   };
-  //console.log(useSelector(selectCardState));
   return (
     <div className="flex items-center justify-center pt-8 h-full">
-      <div className="bg-red-700  w-1/2  p-8 rounded-2xl shadow-lg mb-8 h-full">
-        <h1 className="text-2xl text-center mb-2 text-lime-900 text-outline-white">
+      <div className="bg-red-700 w-full lg:w-1/2 p-8 rounded-2xl shadow-lg mb-8 h-full">
+        <h1 className="text-xl lg:text-2xl text-center mb-2 text-lime-900 text-outline-white">
           {`A letter has arrived for ${cardData.recipient}`}
         </h1>
         <div className="mx-auto flex flex-col justify-between max-w-sm bg-amber-400 border-2 border-neutral-800 border-solid shadow-md">
@@ -56,7 +51,7 @@ export default function SentCard() {
             </div>
 
             <img
-              className="h-14 w-14  self-center rounded-full object-cover"
+              className="h-10 w-10 lg:h-16 lg:w-16  self-center rounded-full object-cover"
               src={cardData.avatar}
               alt="avatar"
             />
