@@ -1,5 +1,3 @@
-<img width="732" alt="ch_home" src="https://github.com/inayoon/christmas_card_app/assets/100747899/de16cca8-06f5-46a4-92e7-a8479bc975f2">
-
 # Christmas_Card_App
  > I've created a service where users can choose a card, write a letter, and share it via a unique URL. This platform provides a personalized and shareable way to convey messages through selected cards.<br/>
 > https://christmas-card-app.onrender.com/
@@ -39,5 +37,169 @@
 |  ![image](https://github.com/inayoon/christmas_card_app/assets/100747899/d2dce9dc-ab19-4a6b-b311-efafdda46885)   |  ![image](https://github.com/inayoon/christmas_card_app/assets/100747899/96f73c2b-13ba-4ffd-988f-688cdb9e392a)  |
 
 <br/>
+
+---
+
+> ### 1. Sign-Up & Sign-In (With Google)
+
+|                                                           Sign-Up with Google                                                              |                                                        Sign-In with Google                                                             |
+| :--------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------: |
+| ![singUp(google)](https://github.com/inayoon/christmas_card_app/assets/100747899/7888c801-a882-4743-9557-3b4051ba259c)  |  ![signIn(google)](https://github.com/inayoon/christmas_card_app/assets/100747899/060f9b0a-973f-48a5-8a24-c9bc6ff12093)  |
+
+<details>
+<summary><h3>Authentication Code (Continue with Google)</h3></summary>
+<br/>
+
+Used firebase GoogleAuth function 
+
+```Javascript
+<!-- OAuth.jsx -->
+import { GoogleAuthProvider, signInWithPopup, getAuth } from "firebase/auth";
+import { app } from "../firebase";
+import { useDispatch } from "react-redux";
+import { signInSuccess } from "../../redux/user/userSlice.js";
+import { useNavigate } from "react-router-dom";
+
+export default function OAuth() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const handleGoogleClick = async () => {
+    try {
+      const provider = new GoogleAuthProvider();
+      const auth = getAuth(app);
+      const result = await signInWithPopup(auth, provider);
+      const res = await fetch("/api/auth/google", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: result.user.displayName,
+          email: result.user.email,
+          photo: result.user.photoURL,
+        }),
+      });
+      const data = await res.json();
+      dispatch(signInSuccess(data));
+      navigate("/");
+    } catch (error) {
+      console.log("Couldn't connect to Google", error);
+    }
+  };
+  return (
+    <button
+      type="button"
+      onClick={handleGoogleClick}
+      className="bg-green-700 rounded-lg p-2 text-white hover:text-yellow-300 hover:font-bold relative group"
+    >
+      Continue with Google
+      <span className="absolute right-60 top-0 transform translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-xl">
+        🎄
+      </span>
+    </button>
+  );
+}
+
+```
+```Javascript
+<!-- auth.contorllers.js -->
+import User from "../models/user.model.js";
+import bcryptjs from "bcryptjs";
+import { errorHandler } from "../utils/error.js";
+import jwt from "jsonwebtoken";
+import { v4 as uuidv4 } from "uuid";
+
+export const signup = async (req, res, next) => {
+  const { username, email, password } = req.body;
+  const hashedPw = bcryptjs.hashSync(password, 10);
+  const newUser = new User({ username, email, password: hashedPw });
+  try {
+    await newUser.save();
+    res.status(201).json({ message: "User created Successfully" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const signin = async (req, res, next) => {
+  const { email, password } = req.body;
+  try {
+    const validUser = await User.findOne({ email });
+    if (!validUser) {
+      return next(errorHandler(404, "User not Found"));
+    }
+    const validPassword = bcryptjs.compareSync(password, validUser.password);
+    if (!validPassword) {
+      return next(errorHandler(401, "Wrong credentials"));
+    }
+
+    const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
+
+    // To avoid returning password to client server
+    // store hashedPw to password and the rest of the info is stored in the 'rest'
+    const { password: hashedPassword, ...rest } = validUser._doc;
+    const expiryDate = new Date(Date.now() + 3 * 3600000); //1hour last
+    //store token value inside the cookie(which is access_token)
+    //and when user is logged in successfully, show the rest of the info
+    res
+      .cookie("access_token", token, { httpOnly: true, expires: expiryDate })
+      .status(200)
+      .json(rest);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const google = async (req, res, next) => {
+  try {
+    const user = await User.findOne({ email: req.body.email });
+    if (user) {
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+      const { password: hashedPw, ...rest } = user._doc;
+      const expiryDate = new Date(Date.now() + 3 * 3600000); //1hr last
+      res
+        .cookie("access_token", token, {
+          httpOnly: true,
+          expires: expiryDate,
+        })
+        .status(200)
+        .json(rest);
+    } else {
+      //if the user does not exist, we need to create password for the user and save it in the db
+      const generatedPw =
+        Math.random().toString(36).slice(-8) +
+        Math.random().toString(36).slice(-8);
+      const hashedPw = bcryptjs.hashSync(generatedPw, 10);
+      const newUser = new User({
+        username:
+          req.body.name.split(" ").join("").toLowerCase() + uuidv4().toString(),
+        email: req.body.email,
+        password: hashedPw,
+        profilePicture: req.body.photo,
+      });
+      await newUser.save();
+      //create JWT with new user id
+      const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
+      // inside newUser._doc, save password value in 'hashedPassword2',
+      // and the rest properties are saved in 'rest' variable
+      const { password: hashedPassword2, ...rest } = newUser._doc;
+      const expiryDate = new Date(Date.now() + 3 * 3600000); //1hour last
+      res
+        .cookie("access_token", token, {
+          httpOnly: true,
+          expires: expiryDate,
+        })
+        .status(200)
+        .json(rest);
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const signout = (req, res) => {
+  res.clearCookie("access_token").status(200).json("Logout successfully");
+};
+
+```
+</details>
 
 ---
