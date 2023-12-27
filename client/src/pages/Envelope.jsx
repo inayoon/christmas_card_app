@@ -110,12 +110,12 @@ export default function Envelope() {
     document.body.removeChild(textArea);
   };
   return (
-    <div className="flex items-center justify-center pt-8 h-full">
-      <div className="bg-red-700  w-1/3  p-8 rounded-2xl shadow-lg mb-8 h-full">
+    <div className="flex flex-col items-center justify-center pt-8 h-full ">
+      <div className="bg-red-700 max-w-lg md:w-2/3 h-full p-4 md:p-8 rounded-2xl shadow-lg mb-8 flex flex-col overflow-y-auto no-scrollbar">
         <h1 className="text-2xl text-center mb-2 text-lime-900 text-outline-white">
           Add your picture beside From
         </h1>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="w-full max-w-md mx-auto">
           <div className="mx-auto flex flex-col justify-between max-w-sm bg-amber-400 border-2 border-neutral-800 border-solid shadow-md">
             <div className="flex">
               <div className="p-4" id="home_banner">

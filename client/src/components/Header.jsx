@@ -10,16 +10,16 @@ export default function Header() {
         <Link to="/">
           <h1
             id="home"
-            className="text-4xl font-bold text-lime-800 text-outline-white px-2"
+            className="text-xl md:text-4xl font-bold text-lime-800 text-outline-white px-2"
           >
             Send Your Christmas Card
           </h1>
         </Link>
-        <ul className="flex gap-4">
+        <ul className="flex gap-4 items-center">
           <Link to="/">
             <li
               id="home"
-              className="text-lg text-white hover:text-yellow-100 px-2"
+              className="text-sm md:text-lg text-white hover:text-yellow-100 px-2"
             >
               Home
             </li>
@@ -30,12 +30,12 @@ export default function Header() {
               <img
                 src={currentUser.profilePicture}
                 alt="avatar"
-                className="h-7 w-7 rounded-full object-cover"
+                className="h-7 w-7 md:h-10 md:w-10 rounded-full object-cover"
               />
             ) : (
               <li
                 id="home"
-                className="text-lg text-white hover:text-yellow-100 px-2"
+                className="text-sm md:text-lg text-white hover:text-yellow-100 px-2"
               >
                 Sign In
               </li>

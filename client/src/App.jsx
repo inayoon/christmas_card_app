@@ -9,9 +9,11 @@ import PrivateRoute from "./components/PrivateRoute";
 import Envelope from "./pages/Envelope";
 import SentCard from "./pages/SentCard";
 import History from "./pages/History";
+import ScrollToTop from "./components/ScrollToTop";
 function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Routes>
         <Route
           path="/"

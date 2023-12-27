@@ -8,6 +8,7 @@ import {
   deleteUserSuccess,
   signOut,
 } from "../../redux/user/userSlice.js";
+import { resetCard } from "../../redux/card/cardSlice.js";
 
 export default function Profile() {
   const { currentUser, loading, error } = useSelector((state) => state.user);
@@ -33,6 +34,7 @@ export default function Profile() {
     try {
       await fetch("/api/auth/signout");
       dispatch(signOut());
+      dispatch(resetCard());
     } catch (error) {
       console.log(error);
     }

@@ -20,16 +20,20 @@ export const signin = async (req, res, next) => {
   const { email, password } = req.body;
   try {
     const validUser = await User.findOne({ email });
-    if (!validUser) return next(errorHandler(404, "User not Found"));
+    if (!validUser) {
+      return next(errorHandler(404, "User not Found"));
+    }
     const validPassword = bcryptjs.compareSync(password, validUser.password);
-    if (!validPassword) return next(errorHandler(401, "Wrong credentials"));
+    if (!validPassword) {
+      return next(errorHandler(401, "Wrong credentials"));
+    }
 
     const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
 
     // To avoid returning password to client server
     // store hashedPw to password and the rest of the info is stored in the 'rest'
     const { password: hashedPassword, ...rest } = validUser._doc;
-    const expiryDate = new Date(Date.now() + 3600000); //1hour last
+    const expiryDate = new Date(Date.now() + 3 * 3600000); //1hour last
     //store token value inside the cookie(which is access_token)
     //and when user is logged in successfully, show the rest of the info
     res
@@ -47,7 +51,7 @@ export const google = async (req, res, next) => {
     if (user) {
       const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
       const { password: hashedPw, ...rest } = user._doc;
-      const expiryDate = new Date(Date.now() + 3600000); //1hr last
+      const expiryDate = new Date(Date.now() + 3 * 3600000); //1hr last
       res
         .cookie("access_token", token, {
           httpOnly: true,
@@ -74,7 +78,7 @@ export const google = async (req, res, next) => {
       // inside newUser._doc, save password value in 'hashedPassword2',
       // and the rest properties are saved in 'rest' variable
       const { password: hashedPassword2, ...rest } = newUser._doc;
-      const expiryDate = new Date(Date.now() + 3600000); //1hour last
+      const expiryDate = new Date(Date.now() + 3 * 3600000); //1hour last
       res
         .cookie("access_token", token, {
           httpOnly: true,

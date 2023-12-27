@@ -34,21 +34,25 @@ export default function CardPicked() {
   }, [title]);
 
   return (
-    <div className="flex h-screen items-center justify-center pt-8">
-      <div className="bg-red-700 w-1/3 h-full p-8 rounded-2xl shadow-lg mb-8 flex flex-col overflow-y-auto no-scrollbar">
+    <div className="flex flex-col items-center justify-center pt-8 h-full ">
+      <div className="bg-red-700 max-w-lg md:w-2/3 h-full p-4 md:p-8 rounded-2xl shadow-lg mb-8 flex flex-col overflow-y-auto no-scrollbar">
         <div
-          className="text-center text-3xl text-green-700 text-outline-white"
+          className="text-center text-2xl md:text-3xl text-green-700 text-outline-white mb-4"
           id="home"
         >
           Ho Ho Ho! <br />
           Merry Christmas 💌
         </div>
         <div>
-          <img className="w-3/5 max-h-44 mx-auto " src={url} alt={title} />
+          <img
+            className="max-w-sm max-h-44 mx-auto p-2"
+            src={url}
+            alt={title}
+          />
         </div>
         <div>
           <select
-            className="mt-2 rounded-md text-sm bg-red-300 cursor-pointer"
+            className="mt-2 rounded-md text-sm bg-red-300 cursor-pointer "
             value={selectedImageTitle}
             onChange={handleDropdownChange}
           >
@@ -64,13 +68,13 @@ export default function CardPicked() {
             placeholder="Write your letter.."
             value={letter}
             onChange={handleLetterChange}
-            className="w-80 h-32 px-4 mt-4 py-2 rounded-lg shadow-md bg-lime-800 text-outline-white focus:outline-none focus:text-green-400 overflow-y-auto"
+            className="w-full h-32 px-4 mt-4 py-2 rounded-lg shadow-md bg-lime-800 text-outline-white focus:outline-none focus:text-green-400 overflow-y-auto"
           />
         </div>
-        <div className="flex gap-10 flex-wrap justify-center">
+        <div className="flex justify-center">
           <button
             onClick={handleAvatar}
-            className="bg-lime-700 rounded-lg mt-2 p-2 shadow-md text-white flex-shrink-0"
+            className="bg-lime-700 rounded-lg mt-4 p-2 md:mt-2 md:ml-4 shadow-md text-white flex-shrink-0"
           >
             Add your avatar
           </button>

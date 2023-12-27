@@ -9,23 +9,9 @@ export default function History() {
     return formattedDate;
   };
 
-  // useEffect(() => {
-  //   const fetchCards = async () => {
-  //     try {
-  //       const response = await axios.get(`/api/card/history/${userId}`);
-  //       const fetchedCardsData = response.data.cards;
-  //       console.log(fetchedCardsData);
-  //       setHistory(fetchedCardsData);
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-  //   };
-  //   fetchCards();
-  // }, [userId]);
-
   return (
-    <div>
-      <h1 className="text-center text-3xl text-emerald-400 py-2 text-outline-black">
+    <div className="p-4 md:p-8">
+      <h1 className="text-center text-3xl text-emerald-400 py-2 text-outline-black mb-4 md:mb-8">
         Sent Items
       </h1>
       <div className="flex justify-center">

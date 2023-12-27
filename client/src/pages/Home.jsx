@@ -69,7 +69,7 @@ export default function Home() {
   // }, [currentUser]);
 
   return (
-    <div>
+    <div className="mx-4 md:mx-8 lg:mx-16 xl:mx-24">
       <p
         className="text-center py-4 text-lime-700 font-semibold text-lg"
         id="home_banner"
@@ -79,7 +79,7 @@ export default function Home() {
         Express Your Heartfelt Wishes With a Christmas Card
       </p>
       <img
-        className="max-w-md mx-auto rounded-xl shadow-md"
+        className="mx-auto rounded-xl shadow-md md:max-w-xl"
         src="https://img.freepik.com/free-vector/gradient-christmas-tinsel-background_52683-76117.jpg?w=900&t=st=1701820769~exp=1701821369~hmac=c2ff811c7178881cfd46906aff692bc522c46c69fae6be2762145fe033c79941"
       />
       <div
@@ -96,14 +96,11 @@ export default function Home() {
         cards so far!
       </div>
       <div className="mt-8 text-center">
-        <p
-          className="mr-40 text-2xl text-amber-200 text-outline-black"
-          id="home"
-        >
+        <p className="text-2xl text-amber-200 text-outline-black" id="home">
           Christmas Cards💌
         </p>
         <button
-          className="ml-80 text-md text-pink-700 hover:scale-110"
+          className="mt-2 ml-72 text-md text-pink-700 hover:scale-110"
           onClick={handleLoadMore}
           id="home"
         >
