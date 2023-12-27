@@ -20,19 +20,23 @@
 <br/>
 
 ## 💌 Main Screens and Features
-|                                                           1.  Home                                                              |                                                         2.  Sent Items                                                            |
-| :--------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------: |
-| ![image](https://github.com/inayoon/christmas_card_app/assets/100747899/3a927b3d-188f-4986-b916-4e85c5a0cf1b) |  ![image](https://github.com/inayoon/christmas_card_app/assets/100747899/f0ba484e-5752-4b49-9cf2-68dd00d2117b) |
+|                                                           1.  Home                                                              |
+| :--------------------------------------------------------------------------------------------------------------------------------------: |
+| ![image](https://github.com/inayoon/christmas_card_app/assets/100747899/3a927b3d-188f-4986-b916-4e85c5a0cf1b) |
+
+|                                                           **2. Sent Items**                                                              |
+| :---------------------------------------------------------------------------------------------------------------------------------: |
+|  ![image](https://github.com/inayoon/christmas_card_app/assets/100747899/f0ba484e-5752-4b49-9cf2-68dd00d2117b) |
 
 |                                                             **3.  Sign-Up**                                                                |                                                         **4. Sign-In**                                                             |
 | :--------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------: |
 |  ![image](https://github.com/inayoon/christmas_card_app/assets/100747899/ba026ef8-c34e-43e7-9031-0eae6aa60ae5)  |  ![image](https://github.com/inayoon/christmas_card_app/assets/100747899/1f59d485-acde-4f44-a1d8-cf497b25a2a2)  |
 
-|                                                             **3.  Write a letter**                                                                |                                                         **4. Add an Avatar**                                                             |                                                         **5. Share the URL**                                                             |
+|                                                             **5.  Write a letter**                                                                |                                                         **6. Add an Avatar**                                                             |                                                         **7. Share the URL**                                                             |
 | :--------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------: |
 |  ![image](https://github.com/inayoon/christmas_card_app/assets/100747899/c00dc6c8-36eb-4b69-9337-7e6930d9d8a7)  |  ![image](https://github.com/inayoon/christmas_card_app/assets/100747899/41f01d79-ebc3-44f1-8824-8750ae1333f5)  |  ![image](https://github.com/inayoon/christmas_card_app/assets/100747899/e44d0608-2f18-4a06-b11b-8d9625969198)  |
 
-|                                                             **3.  Received Card**                                                                |                                                         **4. Display Contents**                                                             |
+|                                                             **8.  Received Card**                                                                |                                                         **9. Display Contents**                                                             |
 | :--------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------: |
 |  ![image](https://github.com/inayoon/christmas_card_app/assets/100747899/d2dce9dc-ab19-4a6b-b311-efafdda46885)   |  ![image](https://github.com/inayoon/christmas_card_app/assets/100747899/96f73c2b-13ba-4ffd-988f-688cdb9e392a)  |
 
@@ -42,9 +46,13 @@
 
 > ### 1. Sign-Up & Sign-In (With Google)
 
-|                                                           Sign-Up with Google                                                              |                                                        Sign-In with Google                                                             |
-| :--------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------: |
-| ![singUp(google)](https://github.com/inayoon/christmas_card_app/assets/100747899/7888c801-a882-4743-9557-3b4051ba259c)  |  ![signIn(google)](https://github.com/inayoon/christmas_card_app/assets/100747899/060f9b0a-973f-48a5-8a24-c9bc6ff12093)  |
+|                                                           Sign-Up with Google                                                              |
+| :--------------------------------------------------------------------------------------------------------------------------------------: |
+| ![singUp(google)](https://github.com/inayoon/christmas_card_app/assets/100747899/7888c801-a882-4743-9557-3b4051ba259c)  |
+
+|                                                        **Sign-In with Google**                                                             |
+| :---------------------------------------------------------------------------------------------------------------------------------: |
+|  ![signIn(google)](https://github.com/inayoon/christmas_card_app/assets/100747899/060f9b0a-973f-48a5-8a24-c9bc6ff12093)  |
 
 <details>
 <summary><h3>Authentication Code (Continue with Google)</h3></summary>
@@ -203,3 +211,71 @@ export const signout = (req, res) => {
 </details>
 
 ---
+
+<br/>
+
+> ### 2. Loading Cards and Card Dropdown
+
+![Load_DropdownCards](https://github.com/inayoon/christmas_card_app/assets/100747899/933a857e-f592-4c59-bac6-9db7eeb2ec0e)
+<details>
+<summary><h3>Loading Cards and CardsDropdown Code</h3></summary>
+<br/>
+
+When a card is changed through the dropdown menu, the code retrieves the changed name value. <br/>
+It then searches for the corresponding card in the JSON data containing all cards. The matched card information is stored in the cardSlice
+
+```Javascript
+<!-- CardPicked.jsx -->
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  selectCardState,
+  selectCard,
+  saveLetter,
+} from "../../redux/card/cardSlice.js";
+import cardData from "../data/card.json";
+
+export default function CardPicked() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { title, url, letter } =
+    useSelector(selectCardState).selectedCard || {};
+  const [selectedImageTitle, setSelectedImageTitle] = useState(title);
+
+   const handleDropdownChange = (e) => {
+    const selectedTitle = e.target.value;
+    setSelectedImageTitle(selectedTitle);
+    const selectedCard = cardData.find((card) => card.title === selectedTitle);
+    dispatch(selectCard(selectedCard));
+  };
+  useEffect(() => {
+    setSelectedImageTitle(title);
+  }, [title]);
+
+...
+
+ return(
+  ...
+ <div>
+   <select
+     className="mt-2 rounded-md text-sm bg-red-300 cursor-pointer "
+     value={selectedImageTitle}
+     onChange={handleDropdownChange}
+    >
+      {cardData.map((card, index) => (
+        <option key={index} value={card.title}>
+          {card.title}
+         </option>
+       ))}
+     </select>
+  )
+}
+```
+</details>
+
+---
+
+<br/>
+
+> ### 3. 암호 유효성 검사 기능
