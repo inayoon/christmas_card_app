@@ -1,3 +1,6 @@
+
+<img width="687" alt="full" src="https://github.com/inayoon/christmas_card_app/assets/100747899/6290afd5-d388-4e84-8320-cfe4029ff071">
+
 # Christmas_Card_App
  > I've created a service where users can choose a card, write a letter, and share it via a unique URL. This platform provides a personalized and shareable way to convey messages through selected cards.<br/>
 > https://christmas-card-app.onrender.com/
