@@ -58,7 +58,8 @@
 <summary><h3>Authentication Code (Continue with Google)</h3></summary>
 <br/>
 
-Used firebase GoogleAuth function 
+Used firebase GoogleAuth function.<br/>
+But, Sign-up and sign-in are possible without a Google account.
 
 ```Javascript
 <!-- OAuth.jsx -->
@@ -218,11 +219,11 @@ export const signout = (req, res) => {
 
 ![Load_DropdownCards](https://github.com/inayoon/christmas_card_app/assets/100747899/933a857e-f592-4c59-bac6-9db7eeb2ec0e)
 <details>
-<summary><h3>Loading Cards and CardsDropdown Code</h3></summary>
+<summary><h3>CardsDropdown Code</h3></summary>
 <br/>
 
 When a card is changed through the dropdown menu, the code retrieves the changed name value. <br/>
-It then searches for the corresponding card in the JSON data containing all cards. The matched card information is stored in the cardSlice
+It then searches for the corresponding card in the JSON data containing all cards. The matched card information is stored in the `cardSlice`.
 
 ```Javascript
 <!-- CardPicked.jsx -->
@@ -278,4 +279,238 @@ export default function CardPicked() {
 
 <br/>
 
-> ### 3. 암호 유효성 검사 기능
+> ### 3. Preview Feature for Attached Images
+![avatarUpload](https://github.com/inayoon/christmas_card_app/assets/100747899/5ab137d8-110d-4bba-9013-aeb7eff3a644)
+
+
+<details>
+<summary><h3>Code for Previewing Attached Avatars</h3></summary>
+<br/>
+
+When a successful image upload occurs using Firebase Storage, the image is assigned a URL. <br/>
+Subsequently, the `updateEnvelope` reducer is invoked via the dispatch function, storing the name and avatar URL of the recipient in the `cardSlice`.
+
+```Javascript
+    const handleFileUpload = async (image) => {
+    const storage = getStorage(app);
+    const fileName = uuidv4() + image.name;
+    const storageRef = ref(storage, fileName);
+    const uploadTask = uploadBytesResumable(storageRef, image);
+    const currentRecipient = recipient;
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        setImagePercent(Math.round(progress));
+      },
+      (error) => {
+        setImageError(true);
+      },
+      async () => {
+        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+        dispatch(
+          updateEnvelope({ recipient: currentRecipient, avatar: downloadURL })
+        );
+      }
+    );
+  };
+
+ return(
+    <div className="flex justify-end mx-8 mt-32 pb-2">
+     <div className="p-4" id="home_banner">
+      From.
+     </div>
+     <input
+      type="file"
+      ref={fileRef}
+      hidden
+      accept="image/*"
+      onChange={(e) => setImage(e.target.files[0])}
+      />
+      <img
+        className="h-14 w-14  self-center cursor-pointer rounded-full object-cover"
+        src={avatar || currentUser.profilePicture}
+        alt="avatar"
+        onClick={() => fileRef.current.click()}
+        />
+     </div>
+ ... 
+)
+```
+
+</details>
+
+---
+
+<br/>
+
+> ### 4. URL Sharing Feature
+![sentCard](https://github.com/inayoon/christmas_card_app/assets/100747899/4e850b23-12f6-4f9a-b96d-8beff953fef2)
+
+
+<details>
+<summary><h3>Code for Sharing Cards</h3></summary>
+<br/>
+
+When users click the send button, all card details are stored in the database. <br/>
+A unique URL, including the card ID, can be effortlessly copied using the copy button, allowing easy sharing with recipients.
+
+```Javascript
+ <!-- Code for Establishing Server Communication through POST request -->
+    const response = await axios.post("/api/card/send-card", formData, {
+        // withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = response.data;
+      if (data.success === false) {
+        console.log("Card sent failed");
+      } else {
+        const newCardId = data.cardId;
+        setCardId(newCardId);
+        const cardURL = `https://christmas-card-app.onrender.com/sent-card/${newCardId}`;
+        setsentCardURL(cardURL);
+        console.log("Card sent successfully");
+      }
+      setIsModalVisible(true);
+    } catch (error) {
+      console.error("Error sending the card", error);
+    }
+  };
+
+ <!-- Code for Copying the URL of the Sent Card  -->
+ const copyToClipboard = (text) => {
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    document.body.appendChild(textArea);
+    textArea.select();
+    document.execCommand("copy");
+    document.body.removeChild(textArea);
+  };
+
+ return (
+ <!-- Where the copyToClipboard Function is Invoked  -->
+   <button
+    onClick={() => copyToClipboard(sentCardURL)}
+    className="bg-blue-500 text-white px-4 py-2 rounded-md"
+   >
+    Copy URL
+   </button>
+)
+    
+```
+
+</details>
+
+---
+
+<br/>
+
+> ### 5. Quantity of Sent Items and History Feature
+![history](https://github.com/inayoon/christmas_card_app/assets/100747899/dab7d638-d457-4207-aedb-ad93758b43d1)
+
+
+<details>
+<summary><h3>Code for Sent Cards History</h3></summary>
+<br/>
+
+When the Home component renders, it makes a GET request to fetch all cards from the database with the corresponding userId.<br/>
+And when clicking the number of cards at `Home` page, it passes the `allCards` state to the `History` page.
+
+```Javascript
+Home.jsx
+ <!-- Code for Server Communication through GET request to get AllCards Info-->
+const getNumberOfCards = async () => {
+    if (currentUser._id) {
+      const response = await axios.get(
+        `/api/card/getAllCard/${currentUser._id}`,
+        {
+          withCredentials: true,
+        }
+      );
+      const data = response.data;
+      setAllCards(data);
+    }
+  };
+  useEffect(() => {
+    getNumberOfCards();
+  }, []);
+
+ <!-- Code for Sending the AllCards state to History Component -->
+const handleClick = () => {
+    if (currentUser) {
+      navigate(`/history/${currentUser._id}`, { state: allCards });
+    } else {
+      navigate("/");
+    }
+
+```
+
+```Javascript
+History.jsx
+import { useLocation } from "react-router-dom";
+
+export default function History() {
+  const location = useLocation();
+  const allCards = location.state;
+  const extractDate = (createdAt) => {
+    const dateObj = new Date(createdAt);
+    const formattedDate = dateObj.toISOString().split("T")[0];
+    return formattedDate;
+  };
+
+  return (
+    <div className="p-4 md:p-8">
+      <h1 className="text-center text-3xl text-emerald-400 py-2 text-outline-black mb-4 md:mb-8">
+        Sent Items
+      </h1>
+      <div className="flex justify-center">
+        <ul className="flex justify-center gap-4 transition-all flex-wrap ">
+          {allCards.map((card, index) => (
+            <li key={index} className=" hover:scale-105 ">
+              <img
+                className="rounded-lg shadow-lg cursor-pointer w-60 h-40  overflow-hidden"
+                key={index}
+                src={card.url}
+              />
+              <div className="mt-2 rounded-xl  bg-green-800 text-center py-1 shadow-lg mb-1">
+                <p className="font-bold text-white">To. {card.recipient}</p>
+                <p className="text-white" id="home_banner">
+                  Date: {extractDate(card.createdAt)}
+                </p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+}
+
+```
+
+</details>
+
+---
+
+<br/>
+
+> ### Used Fonts
+  - [Rubik Bubbles](https://fonts.google.com/specimen/Rubik+Bubbles?query=Rubik+Bubble)
+  - [Nunito](https://fonts.google.com/specimen/Nunito?query=nunito)
+  - [Belmist](https://www.cdnfonts.com/belmist.font)
+
+<br/>
+
+> ### Used Cards Image
+  - (https://img.freepik.com/free-vector/festive-christmas-clipart-elements-collection_53876-95704.jpg)
+  - (https://img.freepik.com/free-vector/festive-christmas-clipart-elements-collection_53876-95704.jpg)
+  - (https://img.freepik.com/free-photo/top-view-festive-christmas-ornaments-with-copy-space_23-2149136143.jpg)
+  - (https://img.freepik.com/free-vector/hand-drawn-christmas-background_23-2148672963.jpg)
+  - (https://img.freepik.com/free-vector/cream-winter-background-christmas-aesthetic-design-vector_53876-151492.jpg)
+  - (https://img.freepik.com/free-vector/flat-christmas-background_23-2149164725.jpg)
+  - (https://www.freepik.com/free-psd/merry-christmas-realistic-background_84924382.htm#query=christmas&position=4&from_view=search&track=sph&uuid=248850e9-6555-405c-bc60-3a7752a6b132#position=4&query=christmas)
+  - (https://www.freepik.com/free-photo/glittery-christmas-snowflakes-festive-background_35261314.htm#page=3&query=christmas&position=40&from_view=search&track=sph&uuid=1a5b3224-671c-4ef8-9b49-80305e0997d3)
+  - (https://www.freepik.com/free-vector/christmas-background-with-glitter-effect_6390227.htm#page=8&query=christmas&position=13&from_view=search&track=sph&uuid=1a5b3224-671c-4ef8-9b49-80305e0997d3)
